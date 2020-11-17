@@ -5,7 +5,6 @@ import cs350f20project.controller.ActionProcessor;
 import cs350f20project.controller.Controller;
 import cs350f20project.controller.cli.CommandLineInterface;
 
-// This is just a tester class for our purposes, not par of the solution
 public class Tester {
 
 	public static void main(String[] args) {
