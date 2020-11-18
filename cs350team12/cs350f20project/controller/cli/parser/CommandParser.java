@@ -3,18 +3,15 @@ package cs350f20project.controller.cli.parser;
 import java.util.ArrayList;
 
 import cs350f20project.controller.command.A_Command;
-import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 
 public class CommandParser {
 	
 	private MyParserHelper parserHelper;
-	private String commandText;
 	private Tokenizer tokens;
 	
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
 		this.parserHelper = parserHelper;
-		this.commandText = commandText;
 		tokens = new Tokenizer(commandText);
 	}
 
@@ -26,12 +23,15 @@ public class CommandParser {
 		if(token.equalsIgnoreCase("DO")) doCommand();
 	}
 	
+	//parses the tokens through an instance of the class DO
 	public void doCommand() {
 		Do d = new Do();
 		this.parserHelper.getActionProcessor().schedule(d.parse(tokens));
 	}
 	
 	
+	
+	//Exit function
 	public void exit() {
 		A_Command command = new CommandMetaDoExit();
 		this.parserHelper.getActionProcessor().schedule(command);
