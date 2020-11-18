@@ -1,6 +1,7 @@
 package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
+import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 
 public class CommandParser {
@@ -16,10 +17,18 @@ public class CommandParser {
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	public void parse() {
-		if(this.commandText.equalsIgnoreCase("@exit")) {
-			A_Command command = new CommandMetaDoExit();
-			this.parserHelper.getActionProcessor().schedule(command);
-		}
+		if(this.commandText.equalsIgnoreCase("@exit")) doExit();
+		if(this.commandText.toUpperCase().startsWith("DO BRAKE ")) doBrake();
+	}
+	
+	public void doBrake() {
+		A_Command command = new CommandBehavioralBrake(commandText.substring(9));
+		this.parserHelper.getActionProcessor().schedule(command);
+	}
+	
+	public void doExit() {
+		A_Command command = new CommandMetaDoExit();
+		this.parserHelper.getActionProcessor().schedule(command);
 	}
 
 }
