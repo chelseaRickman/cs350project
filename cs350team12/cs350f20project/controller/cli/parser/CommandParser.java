@@ -1,7 +1,5 @@
 package cs350f20project.controller.cli.parser;
 
-import java.util.ArrayList;
-
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 
@@ -25,8 +23,8 @@ public class CommandParser {
 	
 	//parses the tokens through an instance of the class DO
 	public void doCommand() {
-		Do d = new Do();
-		this.parserHelper.getActionProcessor().schedule(d.parse(tokens));
+		Do d = new Do(tokens);
+		this.parserHelper.getActionProcessor().schedule(d.parse());
 	}
 	
 	
