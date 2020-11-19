@@ -16,7 +16,6 @@ public class Do extends ParserBase{
 		if(token.equalsIgnoreCase("BRAKE"))
 			return brake(tokens);
 		if(token.equalsIgnoreCase("SET")) {
-			setLast();
 			Set s = new Set(tokens);
 			return s.parse();
 		}

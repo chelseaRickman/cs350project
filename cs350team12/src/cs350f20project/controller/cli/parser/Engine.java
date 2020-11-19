@@ -12,7 +12,7 @@ public class Engine extends ParserBase {
 		String token = tokens.getNext();
 		if(token == null)
 			return tokens.InvalidToken();
-		if(tokens.getPreviousCommand().equalsIgnoreCase("REFERENCE"))
+		if(tokens.getLast().equalsIgnoreCase("REFERENCE"))
 			return setReference();
 		return checkArgs(token);
 	}

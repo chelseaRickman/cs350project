@@ -14,10 +14,9 @@ public class Set extends ParserBase{
 			return reference();
 		if(token.equalsIgnoreCase("SPEED")) {
 			Speed s = new Speed(tokens);
-			setLast();
 			return s.parse();
 		}
-		if(getArgs(token) == true) {
+		if(verifyArg(token) == true) {
 			return parse();
 		}
 		return tokens.InvalidToken();
