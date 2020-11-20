@@ -50,7 +50,6 @@ public class Tokenizer {
 	and getArgs(1) would return the list [1]
 	This helps because in the future we will have lists of multiple arguments (lists of lists)*/
 	public ArrayList<String> getArgs(int arg){
-		System.out.println(args.get(arg));
 		return args.get(arg);
 	}
 	
