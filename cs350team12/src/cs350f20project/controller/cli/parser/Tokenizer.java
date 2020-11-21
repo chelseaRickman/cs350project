@@ -90,4 +90,8 @@ public class Tokenizer {
 			throw new RuntimeException("Error! Invalid token!");
 		
 	}
+	
+	public A_Command InvalidToken(String message) throws RuntimeException{
+		throw new RuntimeException(message);
+	}
 }

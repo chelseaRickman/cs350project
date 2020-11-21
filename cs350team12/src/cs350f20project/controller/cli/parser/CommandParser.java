@@ -1,5 +1,7 @@
 package cs350f20project.controller.cli.parser;
 
+import java.util.ArrayList;
+
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 
@@ -9,6 +11,7 @@ public class CommandParser {
 	private Tokenizer tokens;
 	
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
+		
 		this.parserHelper = parserHelper;
 		tokens = new Tokenizer(commandText);
 	}

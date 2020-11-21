@@ -25,7 +25,8 @@ public class Do extends ParserBase{
 	
 	public A_Command brake(Tokenizer tokens) {
 		String token = tokens.getNext();
-		return new CommandBehavioralBrake(token);
-		
+		if(Checks.checkID(token))
+			return new CommandBehavioralBrake(token);
+		return tokens.InvalidToken("Invalid ID!");
 	}
 }
