@@ -56,7 +56,7 @@ public class Tester {
 		
 		
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-		String commandText = "DO SET id SPEED 1;DO BRAKE id ";
+		String commandText = "DO SELECT SWITCH id PATH Secondary";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 

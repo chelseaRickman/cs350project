@@ -11,7 +11,7 @@ public class Engine extends ParserBase {
 	public A_Command parse() {
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(tokens.getLast().equalsIgnoreCase("REFERENCE"))
 			return setReference();
 		return checkArgs(token);

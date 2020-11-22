@@ -9,7 +9,7 @@ public class Set extends ParserBase{
 	public A_Command parse() {
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("REFERENCE"))
 			return reference();
 		if(token.equalsIgnoreCase("SPEED")) {
@@ -19,7 +19,7 @@ public class Set extends ParserBase{
 		if(verifyArg(token) == true) {
 			return parse();
 		}
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	public A_Command reference() {

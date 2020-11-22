@@ -6,6 +6,7 @@ import cs350f20project.controller.command.A_Command;
 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
  */
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectSwitch;
 
 public class Select extends ParserBase{
 	
@@ -16,7 +17,7 @@ public class Select extends ParserBase{
 	public A_Command parse() {
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("DRAWBRIDGE")){
 			//Stuff
 		}
@@ -24,12 +25,12 @@ public class Select extends ParserBase{
 			//Stuff
 		}
 		if(token.equalsIgnoreCase("SWITCH")) {
-			//Stuff
+			return switchSelect(tokens);
 		}
 		if(verifyArg(token) == true) {
 			return parse();
 		}
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	public A_Command drawbridge() {
@@ -40,10 +41,15 @@ public class Select extends ParserBase{
 		return null;
 	}
 	
-	/*
-	public A_Command switch(Tokenizer tokens) {
-		return new CommandBehavioralSelectSwitch();
+	
+	public A_Command switchSelect(Tokenizer tokens) {
+	String switchid = tokens.getNext();
+	if(!tokens.getNext().equalsIgnoreCase("PATH"))
+		return tokens.invalidToken();
+	String check = tokens.getNext();
+	boolean primorsec = tokens.booleanFromString(check, "PRIMARY", "SECONDARY");
+	return new CommandBehavioralSelectSwitch(switchid, primorsec);
 	}
-	*/
+	
 }
 

@@ -21,14 +21,11 @@ public class Do extends ParserBase{
 	public A_Command parse(){
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("BRAKE"))
 			return brake(tokens);
 		if(token.equalsIgnoreCase("SELECT")) {
-			/*
-			 * Make SELECT class
-			 * Create create a new instance of SELECT and send our tokens there.
-			 */
+			return new Select(tokens).parse();
 		}
 		if(token.equalsIgnoreCase("SET")) {
 			Set s = new Set(tokens);
@@ -40,7 +37,7 @@ public class Do extends ParserBase{
 	public A_Command brake(Tokenizer tokens) {
 		String token = tokens.getNext();
 		if(!isStringStandardJavVar(token.substring(0, 1)))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		return new CommandBehavioralBrake(token);
 		
 	}

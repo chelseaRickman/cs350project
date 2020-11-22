@@ -32,6 +32,6 @@ public class ParserBase {
 		if(verifyArg(token) == true) {
 			return parse();
 		}
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 }

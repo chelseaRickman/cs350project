@@ -86,12 +86,20 @@ public class Tokenizer {
 	}
 	
 	//make it easy to call exception throws like invalid token. Return this at the bottom of every parse function.
-	public A_Command InvalidToken() throws RuntimeException{
-			throw new RuntimeException("Error! Invalid token!");
+	public A_Command invalidToken() throws RuntimeException{
+			throw new RuntimeException("Error! invalid token!");
 		
 	}
 	
-	public A_Command InvalidToken(String message) throws RuntimeException{
+	public A_Command invalidToken(String message) throws RuntimeException{
 		throw new RuntimeException(message);
+	}
+	
+	public boolean booleanFromString(String check, String t, String f) {
+		if(check.equalsIgnoreCase(t))
+			return true;
+		if(check.equalsIgnoreCase(f))
+			return false;
+		return invalidToken() != null;
 	}
 }

@@ -12,7 +12,7 @@ public class Speed extends ParserBase {
 		if(tokens.getLast().equalsIgnoreCase("SET"))
 			return setSpeed(token);
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		return checkArgs(token);
 	}
 	
