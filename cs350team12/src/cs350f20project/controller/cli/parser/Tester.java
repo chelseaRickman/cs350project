@@ -12,7 +12,7 @@ package cs350f20project.controller.cli.parser;
 15 DO SET id SPEED number
 
 22 CREATE POWER CATENARY id1 WITH POLES idn+: IMPLEMENTED
-23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
+23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END ): IMPLEMENTED
 24 CREATE POWER STATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH ( SUBSTATION | SUBSTATIONS )idn+
 25 CREATE POWER SUBSTATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH CATENARIES idn+
 28 CREATE STOCK CAR id AS BOX CommandCreateStockCarBox
