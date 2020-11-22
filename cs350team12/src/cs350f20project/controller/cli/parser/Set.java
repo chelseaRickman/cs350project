@@ -1,5 +1,6 @@
 package cs350f20project.controller.cli.parser;
 import cs350f20project.controller.command.A_Command;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
 
 public class Set extends ParserBase{
 	public Set(Tokenizer tokens) {
@@ -16,6 +17,8 @@ public class Set extends ParserBase{
 			Speed s = new Speed(tokens);
 			return s.parse();
 		}
+		if(token.equalsIgnoreCase("DIRECTION"))
+			return direction();
 		if(verifyArg(token) == true) {
 			return parse();
 		}
@@ -30,5 +33,21 @@ public class Set extends ParserBase{
 		}
 			
 		return null;
+	}
+	
+	public A_Command direction() {
+		String id = tokens.getArgs(0).get(0);
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		boolean isForward = false;
+		String direction = tokens.getNext();
+		if(direction.equalsIgnoreCase("FORWARD")) {
+			isForward = true;
+		}
+		
+		return new CommandBehavioralSetDirection(id, isForward);
+		
 	}
 }

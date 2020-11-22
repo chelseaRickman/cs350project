@@ -39,10 +39,8 @@ public class Create extends ParserBase{
 		if(token == null)
 			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("POWER")) {
-			/*
-			 * Make POWER class
-			 * Create create a new instance of POWER and send our tokens there.
-			 */
+			Power power = new Power(tokens);
+			return power.parse();
 		}
 		if(token.equalsIgnoreCase("STOCK")) {
 			/*
