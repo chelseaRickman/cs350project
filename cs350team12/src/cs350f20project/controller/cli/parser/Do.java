@@ -25,7 +25,10 @@ public class Do extends ParserBase{
 		if(token.equalsIgnoreCase("BRAKE"))
 			return brake(tokens);
 		if(token.equalsIgnoreCase("SELECT")) {
-			//Do stuff
+			/*
+			 * Make SELECT class
+			 * Create create a new instance of SELECT and send our tokens there.
+			 */
 		}
 		if(token.equalsIgnoreCase("SET")) {
 			Set s = new Set(tokens);
