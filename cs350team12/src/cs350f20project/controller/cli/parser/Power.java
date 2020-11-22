@@ -3,10 +3,18 @@ package cs350f20project.controller.cli.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs350f20project.controller.ActionProcessor;
+import cs350f20project.controller.Controller;
+import cs350f20project.controller.cli.CommandLineInterface;
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
 import cs350f20project.controller.command.creational.CommandCreatePowerPole;
+import cs350f20project.controller.command.creational.CommandCreatePowerStation;
+import cs350f20project.datatype.CoordinatesDelta;
+import cs350f20project.datatype.CoordinatesWorld;
+import cs350f20project.datatype.Latitude;
+import cs350f20project.datatype.Longitude;
 
 /*
 22 CREATE POWER CATENARY id1 WITH POLES idn+
@@ -37,7 +45,7 @@ public class Power extends ParserBase {
 	
 	public A_Command catenary() {
 		String id = tokens.getNext();
-		if(!Checks.checkID(id)) {
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		
@@ -54,7 +62,7 @@ public class Power extends ParserBase {
 			return tokens.invalidToken();
 		
 		while(currentPoleId != null) {
-			if(!Checks.checkID(currentPoleId))
+			if(!Checks.checkID(currentPoleId, false))
 				return tokens.invalidToken();
 			
 			poleIds.add(currentPoleId);
@@ -66,7 +74,7 @@ public class Power extends ParserBase {
 	
 	public A_Command pole() {
 		String poleId = tokens.getNext();
-		if(!Checks.checkID(poleId))
+		if(!Checks.checkID(poleId, false))
 			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("ON"))
@@ -76,7 +84,7 @@ public class Power extends ParserBase {
 			return tokens.invalidToken();
 		
 		String trackId = tokens.getNext();
-		if(!Checks.checkID(trackId))
+		if(!Checks.checkID(trackId, false))
 			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("DISTANCE"))
@@ -106,10 +114,39 @@ public class Power extends ParserBase {
 	}
 	
 	public A_Command substation() {
+		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
+		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
 		String id1 = tokens.getNext();
-		if(!Checks.checkID(id1))
+		if(!Checks.checkID(id1, false))
 			return tokens.invalidToken();
-		return null;
+		
+		String token = tokens.getNext();
+		while(!token.equalsIgnoreCase("DELTA")) {
+			verifyArg(token);
+			token = tokens.getNext();
+		}
+		coords = Checks.parseCoordinatesWorld(tokens.getArgs(0), true);
+		//progress to another argumentlist for the delta
+		tokens.nextArgList();
+		while(!token.equalsIgnoreCase("WITH")){
+			verifyArg(token);
+			token = tokens.getNext();
+		}
+		deltas = Checks.parseCoordinatesDelta(tokens.getArgs(1));
+		token = tokens.getNext();
+		if(token.equalsIgnoreCase("CATENARIES"))
+			return tokens.invalidToken();
+		token = tokens.getNext();
+		ArrayList<String> ids = new ArrayList<String>();
+		while(token != null) {
+			if(Checks.checkID(token, false)) {
+				ids.add(token);
+				token = tokens.getNext();
+			}
+		}
+		if(ids.size()==0)
+			return tokens.invalidToken();
+		return new CommandCreatePowerStation(id1, coords, deltas, ids);
 		
 	}
 

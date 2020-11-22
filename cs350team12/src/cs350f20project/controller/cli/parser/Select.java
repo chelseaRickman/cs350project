@@ -41,7 +41,7 @@ public class Select extends ParserBase{
 	
 	public A_Command roundhouse() {
 		String id = tokens.getNext();
-		if(!Checks.checkID(id)) {
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		
@@ -64,7 +64,7 @@ public class Select extends ParserBase{
 
 	public A_Command instructSwitch() {
 		String id = tokens.getNext();
-		if(!Checks.checkID(id)) {
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		

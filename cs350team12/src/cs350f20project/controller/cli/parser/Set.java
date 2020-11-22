@@ -37,7 +37,7 @@ public class Set extends ParserBase{
 	
 	public A_Command direction() {
 		String id = tokens.getArgs(0).get(0);
-		if(!Checks.checkID(id)) {
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		
