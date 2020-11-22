@@ -1,4 +1,7 @@
 package cs350f20project.controller.cli.parser;
+
+import cs350f20project.controller.command.A_Command;
+
 /*
 22 CREATE POWER CATENARY id1 WITH POLES idn+
 23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
@@ -24,10 +27,35 @@ package cs350f20project.controller.cli.parser;
 49 CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number2
  */
 
+
 public class Create extends ParserBase{
 
 	public Create(Tokenizer tokens) {
 		super(tokens);
 	}
-
+	
+	public A_Command parse(){
+		String token = tokens.getNext();
+		if(token == null)
+			return tokens.InvalidToken();
+		if(token.equalsIgnoreCase("POWER")) {
+			/*
+			 * Make POWER class
+			 * Create create a new instance of POWER and send our tokens there.
+			 */
+		}
+		if(token.equalsIgnoreCase("STOCK")) {
+			/*
+			 * Make STOCK class
+			 * Create create a new instance of STOCK and send our tokens there.
+			 */
+		}
+		if(token.equalsIgnoreCase("TRACK")) {
+			/*
+			 * Make TRACK class
+			 * Create create a new instance of TRACK and send our tokens there.
+			 */
+		}
+		return checkArgs(token);
+	}
 }
