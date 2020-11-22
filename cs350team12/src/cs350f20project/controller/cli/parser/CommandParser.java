@@ -3,6 +3,7 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
+import cs350f20project.controller.command.structural.CommandStructuralCommit;
 
 public class CommandParser {
 	
@@ -25,6 +26,7 @@ public class CommandParser {
 			if(token.equalsIgnoreCase("@exit")) exit();
 			if(token.equalsIgnoreCase("CREATE")) createCommand();
 			if(token.equalsIgnoreCase("DO")) doCommand();
+			if(token.equalsIgnoreCase("COMMIT")) this.parserHelper.getActionProcessor().schedule(new CommandStructuralCommit());
 		}
 	}
 	
