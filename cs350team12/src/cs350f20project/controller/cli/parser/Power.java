@@ -8,6 +8,12 @@ import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
 import cs350f20project.controller.command.creational.CommandCreatePowerPole;
 
+/*
+22 CREATE POWER CATENARY id1 WITH POLES idn+
+23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
+24 CREATE POWER STATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH ( SUBSTATION | SUBSTATIONS )idn+
+25 CREATE POWER SUBSTATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH CATENARIES idn+
+ */
 public class Power extends ParserBase {
 	public Power(Tokenizer tokens) {
 		super(tokens);
@@ -37,12 +43,10 @@ public class Power extends ParserBase {
 		
 		List<String> poleIds = new ArrayList<String>();
 		
-		String withText = tokens.getNext(); // "WITH"
-		if(!withText.equalsIgnoreCase("WITH"))
+		if(!tokens.getNext().equalsIgnoreCase("WITH"))
 			return tokens.InvalidToken();
 		
-		String polesText = tokens.getNext(); // "POLES"
-		if(!polesText.equalsIgnoreCase("POLES"))
+		if(!tokens.getNext().equalsIgnoreCase("POLES"))
 			return tokens.InvalidToken();
 		
 		String currentPoleId = tokens.getNext();
