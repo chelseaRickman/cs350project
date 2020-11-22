@@ -21,7 +21,14 @@ public class CommandParser {
 	public void parse() {
 		String token = tokens.getNext();
 		if(token.equalsIgnoreCase("@exit")) exit();
+		if(token.equalsIgnoreCase("CREATE")) createCommand();
 		if(token.equalsIgnoreCase("DO")) doCommand();
+	}
+	
+	//parses the tokens through an instance of the class CREATE
+	public void createCommand() {
+		Create create = new Create(tokens);
+		this.parserHelper.getActionProcessor().schedule(create.parse());
 	}
 	
 	//parses the tokens through an instance of the class DO
