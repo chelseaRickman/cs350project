@@ -32,7 +32,7 @@ public class Select extends ParserBase{
 		if(verifyArg(token) == true) {
 			return parse();
 		}
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	public A_Command drawbridge() {
@@ -42,7 +42,7 @@ public class Select extends ParserBase{
 	public A_Command roundhouse() {
 		String id = tokens.getNext();
 		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		}
 		
 		String positionText = tokens.getNext(); // "POSITION"
@@ -62,7 +62,7 @@ public class Select extends ParserBase{
 	public A_Command instructSwitch() {
 		String id = tokens.getNext();
 		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		}
 		
 		String pathText = tokens.getNext(); // "PATH"
