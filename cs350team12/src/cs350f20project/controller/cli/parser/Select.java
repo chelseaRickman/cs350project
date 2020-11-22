@@ -2,6 +2,7 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSelectRoundhouse;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectSwitch;
 import cs350f20project.datatype.Angle;
 /*
 6  DO SELECT DRAWBRIDGE id POSITION ( UP | DOWN )
@@ -26,7 +27,7 @@ public class Select extends ParserBase{
 			return roundhouse();
 		}
 		if(token.equalsIgnoreCase("SWITCH")) {
-			//Stuff
+			return instructSwitch();
 		}
 		if(verifyArg(token) == true) {
 			return parse();
@@ -57,11 +58,23 @@ public class Select extends ParserBase{
 		
 		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
 	}
-	
-	/*
-	public A_Command switch(Tokenizer tokens) {
-		return new CommandBehavioralSelectSwitch();
+
+	public A_Command instructSwitch() {
+		String id = tokens.getNext();
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		String pathText = tokens.getNext(); // "PATH"
+		
+		boolean isPrimary = false;
+		String primaryOrSecondary = tokens.getNext();
+		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
+			isPrimary = true;
+		}
+		
+		return new CommandBehavioralSelectSwitch(id, isPrimary);
 	}
-	*/
+	
 }
 
