@@ -19,7 +19,7 @@ public class Select extends ParserBase{
 	public A_Command parse() {
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("DRAWBRIDGE")){
 			//Stuff
 		}
