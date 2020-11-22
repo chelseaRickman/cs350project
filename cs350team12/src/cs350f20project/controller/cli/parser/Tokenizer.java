@@ -95,11 +95,4 @@ public class Tokenizer {
 		throw new RuntimeException(message);
 	}
 	
-	public boolean booleanFromString(String check, String t, String f) {
-		if(check.equalsIgnoreCase(t))
-			return true;
-		if(check.equalsIgnoreCase(f))
-			return false;
-		return invalidToken() != null;
-	}
 }

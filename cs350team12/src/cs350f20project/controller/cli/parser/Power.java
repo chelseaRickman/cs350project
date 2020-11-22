@@ -106,7 +106,11 @@ public class Power extends ParserBase {
 	}
 	
 	public A_Command substation() {
+		String id1 = tokens.getNext();
+		if(!Checks.checkID(id1))
+			return tokens.invalidToken();
 		return null;
+		
 	}
 
 }

@@ -37,15 +37,10 @@ public class Do extends ParserBase{
 
 	public A_Command brake(Tokenizer tokens) {
 		String token = tokens.getNext();
-		if(!isStringStandardJavVar(token.substring(0, 1)))
+		if(!Checks.isStringStandardJavVar(token.substring(0, 1)))
 			return tokens.invalidToken();
 		return new CommandBehavioralBrake(token);
 		
 	}
 	
-	//Check for standard Java variable name, underscore included
-	public boolean isStringStandardJavVar(String str) 
-	{ 
-	    return (str.matches("[a-zA-Z_$]")); 
-	}
 }

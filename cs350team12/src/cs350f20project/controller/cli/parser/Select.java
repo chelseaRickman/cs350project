@@ -53,9 +53,11 @@ public class Select extends ParserBase{
 		boolean isClockwise = false;
 		String direction = tokens.getNext();
 		// check valid direction?
-		if(direction.equalsIgnoreCase("CLOCKWISE")) {
+		//Dummied out for booleanfromstring
+		/*if(direction.equalsIgnoreCase("CLOCKWISE")) {
 			isClockwise = true;
-		}
+		}*/
+		Checks.booleanFromString(direction, "CLOCKWISE", "COUNTERCLOCKWISE");
 		
 		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
 	}
@@ -70,9 +72,11 @@ public class Select extends ParserBase{
 			return tokens.invalidToken();
 		boolean isPrimary = false;
 		String primaryOrSecondary = tokens.getNext();
-		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
+		isPrimary = Checks.booleanFromString(primaryOrSecondary, "PRIMARY", "SECONDARY");
+		//Dummied out because booleanfromstring does error checking
+		/*if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
 			isPrimary = true;
-		}
+		}*/
 		
 		return new CommandBehavioralSelectSwitch(id, isPrimary);
 	}
