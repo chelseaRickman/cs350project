@@ -36,7 +36,6 @@ public class Create extends ParserBase{
 	
 	public A_Command parse(){
 		String token = tokens.getNext();
-		System.out.println(token);
 		if(token == null)
 			return tokens.InvalidToken();
 		if(token.equalsIgnoreCase("POWER")) {
