@@ -8,20 +8,24 @@ public class CommandParser {
 	
 	private MyParserHelper parserHelper;
 	private Tokenizer tokens;
+	private String[] texts;
 	
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
-		
+		texts = commandText.split(";");
 		this.parserHelper = parserHelper;
-		tokens = new Tokenizer(commandText);
+		
 	}
 
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	public void parse() {
-		String token = tokens.getNext();
-		if(token.equalsIgnoreCase("@exit")) exit();
-		if(token.equalsIgnoreCase("CREATE")) createCommand();
-		if(token.equalsIgnoreCase("DO")) doCommand();
+		for(int i = 0; i < texts.length; ++i) {
+			tokens = new Tokenizer(texts[i]);
+			String token = tokens.getNext();
+			if(token.equalsIgnoreCase("@exit")) exit();
+			if(token.equalsIgnoreCase("CREATE")) createCommand();
+			if(token.equalsIgnoreCase("DO")) doCommand();
+		}
 	}
 	
 	//parses the tokens through an instance of the class CREATE
