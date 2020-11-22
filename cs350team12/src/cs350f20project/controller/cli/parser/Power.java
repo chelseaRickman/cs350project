@@ -22,7 +22,7 @@ public class Power extends ParserBase {
 	public A_Command parse(){
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("CATENARY"))
 			return catenary();
 		if(token.equalsIgnoreCase("POLE")) 
@@ -38,24 +38,24 @@ public class Power extends ParserBase {
 	public A_Command catenary() {
 		String id = tokens.getNext();
 		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		}
 		
 		List<String> poleIds = new ArrayList<String>();
 		
 		if(!tokens.getNext().equalsIgnoreCase("WITH"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("POLES"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String currentPoleId = tokens.getNext();
 		if(currentPoleId == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		while(currentPoleId != null) {
 			if(!Checks.checkID(currentPoleId))
-				return tokens.InvalidToken();
+				return tokens.invalidToken();
 			
 			poleIds.add(currentPoleId);
 			currentPoleId = tokens.getNext();
@@ -67,34 +67,34 @@ public class Power extends ParserBase {
 	public A_Command pole() {
 		String poleId = tokens.getNext();
 		if(!Checks.checkID(poleId))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("ON"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("TRACK"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String trackId = tokens.getNext();
 		if(!Checks.checkID(trackId))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		if(!tokens.getNext().equalsIgnoreCase("DISTANCE"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String distanceFromString = tokens.getNext();
 		if(distanceFromString == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		Double distanceFrom = Double.parseDouble(distanceFromString);
 		// check number?
 		
 		if(!tokens.getNext().equalsIgnoreCase("FROM"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 	
 		boolean isFromStart = false;
 		String startOrEnd = tokens.getNext();
 		if(startOrEnd == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(startOrEnd.equalsIgnoreCase("START"))
 			isFromStart = true;
 		

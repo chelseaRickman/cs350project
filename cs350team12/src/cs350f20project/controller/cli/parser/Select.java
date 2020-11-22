@@ -45,7 +45,8 @@ public class Select extends ParserBase{
 			return tokens.invalidToken();
 		}
 		
-		String positionText = tokens.getNext(); // "POSITION"
+		if(!tokens.getNext().equalsIgnoreCase("POSITION"))
+			return tokens.invalidToken();
 		Angle angle = new Angle(Double.parseDouble(tokens.getNext()));
 		// Check for valid angle?
 		
@@ -65,8 +66,8 @@ public class Select extends ParserBase{
 			return tokens.invalidToken();
 		}
 		
-		String pathText = tokens.getNext(); // "PATH"
-		
+		if(!tokens.getNext().equalsIgnoreCase("PATH"))
+			return tokens.invalidToken();
 		boolean isPrimary = false;
 		String primaryOrSecondary = tokens.getNext();
 		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
