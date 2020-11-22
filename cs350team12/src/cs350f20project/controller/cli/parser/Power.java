@@ -3,9 +3,10 @@ package cs350f20project.controller.cli.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
-import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
+import cs350f20project.controller.command.creational.CommandCreatePowerPole;
 
 public class Power extends ParserBase {
 	public Power(Tokenizer tokens) {
@@ -60,7 +61,40 @@ public class Power extends ParserBase {
 	}
 	
 	public A_Command pole() {
-		return null;
+		String poleId = tokens.getNext();
+		if(!Checks.checkID(poleId))
+			return tokens.InvalidToken();
+		
+		if(!tokens.getNext().equalsIgnoreCase("ON"))
+			return tokens.InvalidToken();
+		
+		if(!tokens.getNext().equalsIgnoreCase("TRACK"))
+			return tokens.InvalidToken();
+		
+		String trackId = tokens.getNext();
+		if(!Checks.checkID(trackId))
+			return tokens.InvalidToken();
+		
+		if(!tokens.getNext().equalsIgnoreCase("DISTANCE"))
+			return tokens.InvalidToken();
+		
+		String distanceFromString = tokens.getNext();
+		if(distanceFromString == null)
+			return tokens.InvalidToken();
+		Double distanceFrom = Double.parseDouble(distanceFromString);
+		// check number?
+		
+		if(!tokens.getNext().equalsIgnoreCase("FROM"))
+			return tokens.InvalidToken();
+	
+		boolean isFromStart = false;
+		String startOrEnd = tokens.getNext();
+		if(startOrEnd == null)
+			return tokens.InvalidToken();
+		if(startOrEnd.equalsIgnoreCase("START"))
+			isFromStart = true;
+		
+		return new CommandCreatePowerPole(poleId, new TrackLocator(trackId, distanceFrom, isFromStart));
 	}
 	
 	public A_Command station() {
