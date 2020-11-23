@@ -2,8 +2,15 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectRoundhouse;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectSwitch;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetSpeed;
+import cs350f20project.datatype.Angle;
 
 /*
+This class handles all the DO commands
 2  DO BRAKE id
 6  DO SELECT DRAWBRIDGE id POSITION ( UP | DOWN )
 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
@@ -25,22 +32,195 @@ public class Do extends ParserBase{
 		if(token.equalsIgnoreCase("BRAKE"))
 			return brake(tokens);
 		if(token.equalsIgnoreCase("SELECT")) {
-			Select select = new Select(tokens);
-			return select.parse();
+			return doSelect();
 		}
 		if(token.equalsIgnoreCase("SET")) {
-			Set s = new Set(tokens);
-			return s.parse();
+			return doSet();
+			
 		}
 		return checkArgs(token);
 	}
-
+	
+	// Determines which SELECT method needs to be called
+	public A_Command doSelect() {
+		String nextToken = tokens.getNext();
+		if(nextToken == null)
+			return tokens.invalidToken();
+		else if(nextToken.equalsIgnoreCase("DRAWBRIDGE"))
+			return selectDrawbridge();
+		else if(nextToken.equalsIgnoreCase("ROUNDHOUSE"))
+			return selectRoundhouse();
+		else if(nextToken.equalsIgnoreCase("SWITCH"))
+			return selectSwitch();
+		
+		return tokens.invalidToken();
+	}
+	
+	// Determines which SET method needs to be called
+	public A_Command doSet() {
+		String nextToken = tokens.getNext();
+		if(nextToken == null)
+			return tokens.invalidToken();
+		if(nextToken.equalsIgnoreCase("REFERENCE"))
+			return setReference();
+		else {
+			return setId(nextToken);
+		}
+	}
+	
+	
 	public A_Command brake(Tokenizer tokens) {
+		// 2  DO BRAKE id
 		String token = tokens.getNext();
 		if(!Checks.isStringStandardJavVar(token.substring(0, 1)))
 			return tokens.invalidToken();
 		return new CommandBehavioralBrake(token);
 		
 	}
+
+	// DO SELECT commands
 	
+	private A_Command selectDrawbridge() {
+		// 6  DO SELECT DRAWBRIDGE id POSITION ( UP | DOWN )
+		// When entering this method, tokens.getNext() should be id
+		return null;
+	}
+	
+	private A_Command selectRoundhouse() {
+		// 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
+		// When entering this method, tokens.getNext() should be id
+		String id = tokens.getNext();
+		// need to check valid id
+//		if(!Checks.checkID(id)) {
+//			return tokens.invalidToken();
+//		}
+		
+		String positionText = tokens.getNext();
+		if(positionText == null || !positionText.equalsIgnoreCase("POSITION"))
+			return tokens.invalidToken();
+		
+		String stringAngle = tokens.getNext();
+		if(stringAngle == null)
+			return tokens.invalidToken();
+		
+		Angle angle = new Angle(Double.parseDouble(stringAngle));
+		// Check for valid angle?
+		
+		boolean isClockwise = false;
+		String direction = tokens.getNext();
+		if(direction == null)
+			return tokens.invalidToken();
+		// check valid direction?
+		
+		//Add check for two values, will ensure the token is at least one of the two
+		if(direction.equalsIgnoreCase("CLOCKWISE")) {
+			isClockwise = true;
+		}
+		
+		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
+	}
+	
+	private A_Command selectSwitch() {
+		// 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
+		// When entering this method, tokens.getNext() should be id
+		String id = tokens.getNext();
+		if(tokens == null)
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id)) {
+//			return tokens.invalidToken();
+//		}
+		
+		String pathText = tokens.getNext(); 
+		if(pathText == null || !pathText.equalsIgnoreCase("PATH"))
+			return tokens.invalidToken();
+		
+		boolean isPrimary = false;
+		String primaryOrSecondary = tokens.getNext();
+		if(primaryOrSecondary == null)
+			return tokens.invalidToken();
+		//Add check for two values, will ensure the token is at least one of the two
+		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
+			isPrimary = true;
+		}
+		
+		return new CommandBehavioralSelectSwitch(id, isPrimary);
+	}
+	
+	// DO SET commands
+	
+	private A_Command setReference() {
+		// 12 DO SET REFERENCE ENGINE id
+		// When entering this method, tokens.getNext() should be "ENGINE"
+		String engineText = tokens.getNext();
+		if(engineText == null)
+			return tokens.invalidToken();
+		if(!engineText.equalsIgnoreCase("ENGINE"))
+			return tokens.invalidToken();
+		
+		String id = tokens.getNext();
+		if(id == null)
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id))
+//			return tokens.invalidToken();
+		
+		return new CommandBehavioralSetReference(id);
+	}
+	
+	private A_Command setId(String id) {
+		/* 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
+		 * 15 DO SET id SPEED number
+		 * When entering this method, the token param should be the id at this point so ensure that is the case
+		 * Get next token to see if it is DIRECTION or SPEED and then call the corresponding method
+		 * if neither "DIRECTION" or "SPEED", then invalid token
+		 */
+		if(id == null)
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id))
+//			return tokens.invalidToken();
+		
+		String directionOrSpeed = tokens.getNext();
+		if(directionOrSpeed == null)
+			return tokens.invalidToken();
+		if(directionOrSpeed.equalsIgnoreCase("DIRECTION"))
+			return setIdDirection(id);
+		else if(directionOrSpeed.equalsIgnoreCase("SPEED"))
+			return setIdSpeed(id);
+		
+		return tokens.invalidToken();
+	}
+	
+	// setId helper methods
+	
+	private A_Command setIdDirection(String id) {
+		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
+		boolean isForward = false;
+		String direction = tokens.getNext();
+		if(direction.equalsIgnoreCase("FORWARD")) {
+			isForward = true;
+		}
+		
+		System.out.println("ID: " + id + "Direction: " + direction + "isForward: " + isForward);
+		return new CommandBehavioralSetDirection(id, isForward);
+	}
+	
+	private A_Command setIdSpeed(String id) {
+		// 15 DO SET id SPEED number
+		String number = tokens.getNext();
+		if(number == null)
+			return tokens.invalidToken();
+		
+		double speed = Double.parseDouble(number);
+		
+		return new CommandBehavioralSetSpeed(id, speed);
+	}
+	
+	//Check for standard Java variable name, underscore included
+	public boolean isStringStandardJavVar(String str) 
+	{ 
+	    return (str.matches("[a-zA-Z_$]")); 
+	}
+
 }
