@@ -28,7 +28,7 @@ public class Do extends ParserBase{
 	public A_Command parse(){
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("BRAKE"))
 			return brake(tokens);
 		if(token.equalsIgnoreCase("SELECT")) {
@@ -45,7 +45,7 @@ public class Do extends ParserBase{
 	public A_Command doSelect() {
 		String nextToken = tokens.getNext();
 		if(nextToken == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		else if(nextToken.equalsIgnoreCase("DRAWBRIDGE"))
 			return selectDrawbridge();
 		else if(nextToken.equalsIgnoreCase("ROUNDHOUSE"))
@@ -53,14 +53,14 @@ public class Do extends ParserBase{
 		else if(nextToken.equalsIgnoreCase("SWITCH"))
 			return selectSwitch();
 		
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	// Determines which SET method needs to be called
 	public A_Command doSet() {
 		String nextToken = tokens.getNext();
 		if(nextToken == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(nextToken.equalsIgnoreCase("REFERENCE"))
 			return setReference();
 		else {
@@ -72,12 +72,12 @@ public class Do extends ParserBase{
 	public A_Command brake(Tokenizer tokens) {
 		// 2  DO BRAKE id
 		String token = tokens.getNext();
-		if(!isStringStandardJavVar(token.substring(0, 1)))
-			return tokens.InvalidToken();
+		if(!Checks.isStringStandardJavVar(token.substring(0, 1)))
+			return tokens.invalidToken();
 		return new CommandBehavioralBrake(token);
 		
 	}
-	
+
 	// DO SELECT commands
 	
 	private A_Command selectDrawbridge() {
@@ -90,17 +90,18 @@ public class Do extends ParserBase{
 		// 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
 		// When entering this method, tokens.getNext() should be id
 		String id = tokens.getNext();
-		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
-		}
+		// need to check valid id
+//		if(!Checks.checkID(id)) {
+//			return tokens.invalidToken();
+//		}
 		
 		String positionText = tokens.getNext();
 		if(positionText == null || !positionText.equalsIgnoreCase("POSITION"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String stringAngle = tokens.getNext();
 		if(stringAngle == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		Angle angle = new Angle(Double.parseDouble(stringAngle));
 		// Check for valid angle?
@@ -108,7 +109,7 @@ public class Do extends ParserBase{
 		boolean isClockwise = false;
 		String direction = tokens.getNext();
 		if(direction == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		// check valid direction?
 		
 		//Add check for two values, will ensure the token is at least one of the two
@@ -124,19 +125,20 @@ public class Do extends ParserBase{
 		// When entering this method, tokens.getNext() should be id
 		String id = tokens.getNext();
 		if(tokens == null)
-			return tokens.InvalidToken();
-		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
-		}
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id)) {
+//			return tokens.invalidToken();
+//		}
 		
 		String pathText = tokens.getNext(); 
 		if(pathText == null || !pathText.equalsIgnoreCase("PATH"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		boolean isPrimary = false;
 		String primaryOrSecondary = tokens.getNext();
 		if(primaryOrSecondary == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		//Add check for two values, will ensure the token is at least one of the two
 		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
 			isPrimary = true;
@@ -152,15 +154,16 @@ public class Do extends ParserBase{
 		// When entering this method, tokens.getNext() should be "ENGINE"
 		String engineText = tokens.getNext();
 		if(engineText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!engineText.equalsIgnoreCase("ENGINE"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String id = tokens.getNext();
 		if(id == null)
-			return tokens.InvalidToken();
-		if(!Checks.checkID(id))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id))
+//			return tokens.invalidToken();
 		
 		return new CommandBehavioralSetReference(id);
 	}
@@ -173,19 +176,20 @@ public class Do extends ParserBase{
 		 * if neither "DIRECTION" or "SPEED", then invalid token
 		 */
 		if(id == null)
-			return tokens.InvalidToken();
-		if(!Checks.checkID(id))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(id))
+//			return tokens.invalidToken();
 		
 		String directionOrSpeed = tokens.getNext();
 		if(directionOrSpeed == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(directionOrSpeed.equalsIgnoreCase("DIRECTION"))
 			return setIdDirection(id);
 		else if(directionOrSpeed.equalsIgnoreCase("SPEED"))
 			return setIdSpeed(id);
 		
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	// setId helper methods
@@ -206,7 +210,7 @@ public class Do extends ParserBase{
 		// 15 DO SET id SPEED number
 		String number = tokens.getNext();
 		if(number == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		double speed = Double.parseDouble(number);
 		
@@ -218,6 +222,5 @@ public class Do extends ParserBase{
 	{ 
 	    return (str.matches("[a-zA-Z_$]")); 
 	}
-	
-	
+
 }

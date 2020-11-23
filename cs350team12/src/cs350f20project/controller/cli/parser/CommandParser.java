@@ -1,14 +1,15 @@
 package cs350f20project.controller.cli.parser;
 
-import java.util.ArrayList;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
+import cs350f20project.controller.command.structural.CommandStructuralCommit;
 
 public class CommandParser {
 	
 	private MyParserHelper parserHelper;
 	private Tokenizer tokens;
+	private String[] texts;
 	
 /*
 CommandParser contains all the misc commands. It passes the DO and CREATE commands to their respective classes
@@ -24,45 +25,46 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 67 Rule#2 through Rule#65
 */
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
-		
+		texts = commandText.split(";");
 		this.parserHelper = parserHelper;
-		tokens = new Tokenizer(commandText);
+		
 	}
 
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	// Still need to account for multiple commands separated by semi-colon
 	public void parse() {
-		String token = tokens.getNext();
-		if(token == null)
-			throw new RuntimeException("Error! Invalid token!");
-		
-		if(token.equalsIgnoreCase("CREATE"))
-			createCommand();
-		else if(token.equalsIgnoreCase("DO"))
-			doCommand();
-		else if(token.equalsIgnoreCase("@EXIT"))
-			exit();
-		else if(token.equalsIgnoreCase("@RUN"))
-			run();
-		else if(token.equalsIgnoreCase("COMMIT"))
-			commit();
-		else if(token.equalsIgnoreCase("USE"))
-			use();
-		else if(token.equalsIgnoreCase("CLOSE"))
-			closeView();
-		else if(token.equalsIgnoreCase("OPEN"))
-			openView();
-		else if(token.equalsIgnoreCase("COUPLE"))
-			coupleStock();
-		else if(token.equalsIgnoreCase("LOCATE"))
-			locateStock();
-		else if(token.equalsIgnoreCase("UNCOUPLE"))
-			uncoupleStock();
-		else {
-			throw new RuntimeException("Error! Invalid token!");
+		for(int i = 0; i < texts.length; ++i) {
+			String token = tokens.getNext();
+			if(token == null)
+				throw new RuntimeException("Error! Invalid token!");
+			
+			if(token.equalsIgnoreCase("CREATE"))
+				createCommand();
+			else if(token.equalsIgnoreCase("DO"))
+				doCommand();
+			else if(token.equalsIgnoreCase("@EXIT"))
+				exit();
+			else if(token.equalsIgnoreCase("@RUN"))
+				run();
+			else if(token.equalsIgnoreCase("COMMIT"))
+				commit();
+			else if(token.equalsIgnoreCase("USE"))
+				use();
+			else if(token.equalsIgnoreCase("CLOSE"))
+				closeView();
+			else if(token.equalsIgnoreCase("OPEN"))
+				openView();
+			else if(token.equalsIgnoreCase("COUPLE"))
+				coupleStock();
+			else if(token.equalsIgnoreCase("LOCATE"))
+				locateStock();
+			else if(token.equalsIgnoreCase("UNCOUPLE"))
+				uncoupleStock();
+			else {
+				throw new RuntimeException("Error! Invalid token!");
+			}
 		}
-		
 	}
 	
 	//parses the tokens through an instance of the class CREATE

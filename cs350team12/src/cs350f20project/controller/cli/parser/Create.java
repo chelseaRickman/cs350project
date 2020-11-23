@@ -44,7 +44,7 @@ public class Create extends ParserBase{
 	public A_Command parse(){
 		String token = tokens.getNext();
 		if(token == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(token.equalsIgnoreCase("POWER")) {
 			return createPower();
 		}
@@ -62,7 +62,7 @@ public class Create extends ParserBase{
 	public A_Command createPower() {
 		String nextToken = tokens.getNext();
 		if(nextToken == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		if(nextToken.equalsIgnoreCase("CATENARY"))
 			return powerCatenary();
@@ -73,28 +73,28 @@ public class Create extends ParserBase{
 		if(nextToken.equalsIgnoreCase("SUBSTATION"))
 			return powerSubstation();
 		
-		return tokens.InvalidToken();	
+		return tokens.invalidToken();	
 	}
 	
 	// Determines which STOCK method needs to be called
 	public A_Command createStock() {
 		String nextToken = tokens.getNext();
 		if(nextToken == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 	
 		if(nextToken.equalsIgnoreCase("CAR"))
 			return stockCar();
 		if(nextToken.equalsIgnoreCase("ENGINE"))
 			return stockEngine();
 		
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	// Determines which TRACK method needs to be called
 	public A_Command createTrack() {
 		String nextToken = tokens.getNext();
 		if(nextToken == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(nextToken.equalsIgnoreCase("BRIDGE"))
 			return trackBridge();
 		if(nextToken.equalsIgnoreCase("CROSSING"))
@@ -114,7 +114,7 @@ public class Create extends ParserBase{
 		if(nextToken.equalsIgnoreCase("SWITCH"))
 			return trackSwitch();
 		
-		return tokens.InvalidToken();
+		return tokens.invalidToken();
 	}
 	
 	// CREATE POWER commands
@@ -124,32 +124,34 @@ public class Create extends ParserBase{
 		// When entering this method tokens.getNext() should be id1
 		String id = tokens.getNext();
 		if(id == null)
-			return tokens.InvalidToken();
-		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
-		}
+			return tokens.invalidToken();
+		//Need to check valid id
+//		if(!Checks.checkID(id)) {
+//			return tokens.invalidToken();
+//		}
 		
 		List<String> poleIds = new ArrayList<String>();
 		
 		String withText = tokens.getNext();
 		if(withText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!withText.equalsIgnoreCase("WITH"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String polesText = tokens.getNext();
 		if(polesText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!polesText.equalsIgnoreCase("POLES"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String currentPoleId = tokens.getNext();
 		if(currentPoleId == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		while(currentPoleId != null) {
-			if(!Checks.checkID(currentPoleId))
-				return tokens.InvalidToken();
+			//Need to check valid ID
+//			if(!Checks.checkID(currentPoleId))
+//				return tokens.invalidToken();
 			
 			poleIds.add(currentPoleId);
 			currentPoleId = tokens.getNext();
@@ -162,49 +164,51 @@ public class Create extends ParserBase{
 		// 23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
 		// When entering this method tokens.getNext() should be id1
 		String poleId = tokens.getNext();
-		if(!Checks.checkID(poleId))
-			return tokens.InvalidToken();
+		//need to check valid id
+//		if(!Checks.checkID(poleId))
+//			return tokens.invalidToken();
 		
 		String onText = tokens.getNext();
 		if(onText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!onText.equalsIgnoreCase("ON"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String trackText = tokens.getNext();
 		if(trackText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!trackText.equalsIgnoreCase("TRACK"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String trackId = tokens.getNext();
 		if(trackId == null)
-			return tokens.InvalidToken();
-		if(!Checks.checkID(trackId))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
+		// need to check valid id
+//		if(!Checks.checkID(trackId))
+//			return tokens.invalidToken();
 		
 		String distanceText = tokens.getNext();
 		if(distanceText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!distanceText.equalsIgnoreCase("DISTANCE"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		
 		String distanceFromString = tokens.getNext();
 		if(distanceFromString == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		Double distanceFrom = Double.parseDouble(distanceFromString);
 		// check number?
 		
 		String fromText = tokens.getNext();
 		if(fromText == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		if(!fromText.equalsIgnoreCase("FROM"))
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 	
 		boolean isFromStart = false;
 		String startOrEnd = tokens.getNext();
 		if(startOrEnd == null)
-			return tokens.InvalidToken();
+			return tokens.invalidToken();
 		//Add check to ensure the token is either START or END
 		if(startOrEnd.equalsIgnoreCase("START"))
 			isFromStart = true;

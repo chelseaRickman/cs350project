@@ -1,5 +1,7 @@
 package cs350f20project.controller.cli.parser;
 
+import java.util.ArrayList;
+
 /* This is just a tester class for our purposes. Not a part of the solution
 1 ( ( Rule#66 | Rule#67 ) ( ';' )? )*
 
@@ -49,14 +51,25 @@ package cs350f20project.controller.cli.parser;
 import cs350f20project.controller.ActionProcessor;
 import cs350f20project.controller.Controller;
 import cs350f20project.controller.cli.CommandLineInterface;
+import cs350f20project.datatype.CoordinatesDelta;
+import cs350f20project.datatype.CoordinatesWorld;
 
 public class Tester {
 
 	public static void main(String[] args) {
-		
-		
+		/*ArrayList<String> testarr = new ArrayList();
+		for(int i = 0; i < 2; ++i) {
+		testarr.add("1");
+		testarr.add("*");
+		testarr.add("1");
+		testarr.add("'");
+		testarr.add("1.0");
+		testarr.add("\"");
+		}
+		CoordinatesWorld delt = Checks.parseCoordinatesWorld(testarr, false);
+		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-		String commandText = "DO SET id SPEED 1;DO BRAKE id ";
+		String commandText = "DO SELECT SWITCH id PATH Secondary";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 
