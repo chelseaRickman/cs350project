@@ -7,6 +7,12 @@ import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
 import cs350f20project.controller.command.creational.CommandCreatePowerPole;
+import cs350f20project.controller.command.creational.CommandCreatePowerStation;
+import cs350f20project.controller.command.creational.CommandCreatePowerSubstation;
+import cs350f20project.datatype.CoordinatesDelta;
+import cs350f20project.datatype.CoordinatesWorld;
+import cs350f20project.datatype.Latitude;
+import cs350f20project.datatype.Longitude;
 
 /*
  * This class handles all the CREATE commands
@@ -210,8 +216,7 @@ public class Create extends ParserBase{
 		if(startOrEnd == null)
 			return tokens.invalidToken();
 		//Add check to ensure the token is either START or END
-		if(startOrEnd.equalsIgnoreCase("START"))
-			isFromStart = true;
+		isFromStart = Checks.booleanFromString(startOrEnd, "START", "END");
 		
 		System.out.println(poleId + trackId + distanceFrom + isFromStart);
 		return new CommandCreatePowerPole(poleId, new TrackLocator(trackId, distanceFrom, isFromStart));
@@ -226,7 +231,39 @@ public class Create extends ParserBase{
 	private A_Command powerSubstation() {
 		// 25 CREATE POWER SUBSTATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH CATENARIES idn+
 		// When entering this method tokens.getNext() should be id1
-		return null;
+		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
+		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
+		String id1 = tokens.getNext();
+		if(!Checks.checkID(id1, true))
+			return tokens.invalidToken();
+
+		String token = tokens.getNext();
+		while(!token.equalsIgnoreCase("DELTA")) {
+			verifyArg(token);
+			token = tokens.getNext();
+		}
+		coords = Checks.parseCoordinatesWorld(tokens.getArgs(0), true);
+		//progress to another argumentlist for the delta
+		tokens.nextArgList();
+		while(!token.equalsIgnoreCase("WITH")){
+			verifyArg(token);
+			token = tokens.getNext();
+		}
+		deltas = Checks.parseCoordinatesDelta(tokens.getArgs(1));
+		token = tokens.getNext();
+		if(token.equalsIgnoreCase("CATENARIES"))
+			return tokens.invalidToken();
+		token = tokens.getNext();
+		ArrayList<String> ids = new ArrayList<String>();
+		while(token != null) {
+			if(Checks.checkID(token, false)) {
+				ids.add(token);
+				token = tokens.getNext();
+			}
+		}
+		if(ids.size()==0)
+			return tokens.invalidToken();
+		return new CommandCreatePowerSubstation(id1, coords, deltas, ids);
 	}
 	
 	// CREATE STOCK commands
