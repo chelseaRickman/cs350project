@@ -60,6 +60,7 @@ public class Select extends ParserBase{
 		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
 	}
 
+	//MOVED
 	public A_Command instructSwitch() {
 		String id = tokens.getNext();
 		if(!Checks.checkID(id)) {

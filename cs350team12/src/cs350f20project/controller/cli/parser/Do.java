@@ -3,6 +3,7 @@ package cs350f20project.controller.cli.parser;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSelectRoundhouse;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectSwitch;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetSpeed;
@@ -109,11 +110,11 @@ public class Do extends ParserBase{
 		if(direction == null)
 			return tokens.InvalidToken();
 		// check valid direction?
+		
+		//Add check for two values, will ensure the token is at least one of the two
 		if(direction.equalsIgnoreCase("CLOCKWISE")) {
 			isClockwise = true;
 		}
-		
-		System.out.println("ID: " + id + " Angle: " + angle + "Direction: " + direction + "isClockwise: " + isClockwise);
 		
 		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
 	}
@@ -121,7 +122,27 @@ public class Do extends ParserBase{
 	private A_Command selectSwitch() {
 		// 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
 		// When entering this method, tokens.getNext() should be id
-		return null;
+		String id = tokens.getNext();
+		if(tokens == null)
+			return tokens.InvalidToken();
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		String pathText = tokens.getNext(); 
+		if(pathText == null || !pathText.equalsIgnoreCase("PATH"))
+			return tokens.InvalidToken();
+		
+		boolean isPrimary = false;
+		String primaryOrSecondary = tokens.getNext();
+		if(primaryOrSecondary == null)
+			return tokens.InvalidToken();
+		//Add check for two values, will ensure the token is at least one of the two
+		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
+			isPrimary = true;
+		}
+		
+		return new CommandBehavioralSelectSwitch(id, isPrimary);
 	}
 	
 	// DO SET commands
