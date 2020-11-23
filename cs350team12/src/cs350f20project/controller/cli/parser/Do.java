@@ -4,6 +4,7 @@ import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetSpeed;
 
 /*
 This class handles all the DO commands
@@ -121,6 +122,8 @@ public class Do extends ParserBase{
 		 * Get next token to see if it is DIRECTION or SPEED and then call the corresponding method
 		 * if neither "DIRECTION" or "SPEED", then invalid token
 		 */
+		if(id == null)
+			return tokens.InvalidToken();
 		if(!Checks.checkID(id))
 			return tokens.InvalidToken();
 		
@@ -139,10 +142,6 @@ public class Do extends ParserBase{
 	
 	private A_Command setIdDirection(String id) {
 		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
-		if(!Checks.checkID(id)) {
-			return tokens.InvalidToken();
-		}
-		
 		boolean isForward = false;
 		String direction = tokens.getNext();
 		if(direction.equalsIgnoreCase("FORWARD")) {
@@ -155,7 +154,13 @@ public class Do extends ParserBase{
 	
 	private A_Command setIdSpeed(String id) {
 		// 15 DO SET id SPEED number
-		return null;
+		String number = tokens.getNext();
+		if(number == null)
+			return tokens.InvalidToken();
+		
+		double speed = Double.parseDouble(number);
+		
+		return new CommandBehavioralSetSpeed(id, speed);
 	}
 	
 	//Check for standard Java variable name, underscore included

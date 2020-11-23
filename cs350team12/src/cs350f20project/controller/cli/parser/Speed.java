@@ -16,6 +16,7 @@ public class Speed extends ParserBase {
 		return checkArgs(token);
 	}
 	
+	//MOVED
 	public A_Command setSpeed(String token) {
 		double speed = Double.parseDouble(token);
 		return new CommandBehavioralSetSpeed(tokens.getArgs(0).get(0), speed);
