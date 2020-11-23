@@ -3,6 +3,7 @@ package cs350f20project.controller.cli.parser;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
 
 /*
 This class handles all the DO commands
@@ -98,7 +99,19 @@ public class Do extends ParserBase{
 	private A_Command setReference() {
 		// 12 DO SET REFERENCE ENGINE id
 		// When entering this method, tokens.getNext() should be "ENGINE"
-		return null;
+		String engineText = tokens.getNext();
+		if(engineText == null)
+			return tokens.InvalidToken();
+		if(!engineText.equalsIgnoreCase("ENGINE"))
+			return tokens.InvalidToken();
+		
+		String id = tokens.getNext();
+		if(id == null)
+			return tokens.InvalidToken();
+		if(!Checks.checkID(id))
+			return tokens.InvalidToken();
+		
+		return new CommandBehavioralSetReference(id);
 	}
 	
 	private A_Command setId(String id) {

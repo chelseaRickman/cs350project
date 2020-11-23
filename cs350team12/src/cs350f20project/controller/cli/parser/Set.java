@@ -25,6 +25,7 @@ public class Set extends ParserBase{
 		return tokens.InvalidToken();
 	}
 	
+	//MOVED
 	public A_Command reference() {
 		String token = tokens.getNext();
 		if(token.equalsIgnoreCase("ENGINE")) {
@@ -35,6 +36,8 @@ public class Set extends ParserBase{
 		return null;
 	}
 	
+	
+	//MOVED
 	public A_Command direction() {
 		String id = tokens.getArgs(0).get(0);
 		if(!Checks.checkID(id)) {
