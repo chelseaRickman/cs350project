@@ -3,8 +3,10 @@ package cs350f20project.controller.cli.parser;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
+import cs350f20project.controller.command.creational.CommandCreatePowerPole;
 
 /*
  * This class handles all the CREATE commands
@@ -159,7 +161,56 @@ public class Create extends ParserBase{
 	private A_Command powerPole() {
 		// 23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
 		// When entering this method tokens.getNext() should be id1
-		return null;
+		String poleId = tokens.getNext();
+		if(!Checks.checkID(poleId))
+			return tokens.InvalidToken();
+		
+		String onText = tokens.getNext();
+		if(onText == null)
+			return tokens.InvalidToken();
+		if(!onText.equalsIgnoreCase("ON"))
+			return tokens.InvalidToken();
+		
+		String trackText = tokens.getNext();
+		if(trackText == null)
+			return tokens.InvalidToken();
+		if(!trackText.equalsIgnoreCase("TRACK"))
+			return tokens.InvalidToken();
+		
+		String trackId = tokens.getNext();
+		if(trackId == null)
+			return tokens.InvalidToken();
+		if(!Checks.checkID(trackId))
+			return tokens.InvalidToken();
+		
+		String distanceText = tokens.getNext();
+		if(distanceText == null)
+			return tokens.InvalidToken();
+		if(!distanceText.equalsIgnoreCase("DISTANCE"))
+			return tokens.InvalidToken();
+		
+		String distanceFromString = tokens.getNext();
+		if(distanceFromString == null)
+			return tokens.InvalidToken();
+		Double distanceFrom = Double.parseDouble(distanceFromString);
+		// check number?
+		
+		String fromText = tokens.getNext();
+		if(fromText == null)
+			return tokens.InvalidToken();
+		if(!fromText.equalsIgnoreCase("FROM"))
+			return tokens.InvalidToken();
+	
+		boolean isFromStart = false;
+		String startOrEnd = tokens.getNext();
+		if(startOrEnd == null)
+			return tokens.InvalidToken();
+		//Add check to ensure the token is either START or END
+		if(startOrEnd.equalsIgnoreCase("START"))
+			isFromStart = true;
+		
+		System.out.println(poleId + trackId + distanceFrom + isFromStart);
+		return new CommandCreatePowerPole(poleId, new TrackLocator(trackId, distanceFrom, isFromStart));
 	}
 	
 	private A_Command powerStation() {
