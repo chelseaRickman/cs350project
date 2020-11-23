@@ -35,6 +35,7 @@ public class Power extends ParserBase {
 		return checkArgs(token);
 	}
 	
+	//MOVED
 	public A_Command catenary() {
 		String id = tokens.getNext();
 		if(!Checks.checkID(id)) {

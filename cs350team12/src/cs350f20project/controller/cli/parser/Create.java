@@ -1,6 +1,10 @@
 package cs350f20project.controller.cli.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cs350f20project.controller.command.A_Command;
+import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
 
 /*
  * This class handles all the CREATE commands
@@ -116,7 +120,40 @@ public class Create extends ParserBase{
 	private A_Command powerCatenary() {
 		// 22 CREATE POWER CATENARY id1 WITH POLES idn+
 		// When entering this method tokens.getNext() should be id1
-		return null;
+		String id = tokens.getNext();
+		if(id == null)
+			return tokens.InvalidToken();
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		List<String> poleIds = new ArrayList<String>();
+		
+		String withText = tokens.getNext();
+		if(withText == null)
+			return tokens.InvalidToken();
+		if(!withText.equalsIgnoreCase("WITH"))
+			return tokens.InvalidToken();
+		
+		String polesText = tokens.getNext();
+		if(polesText == null)
+			return tokens.InvalidToken();
+		if(!polesText.equalsIgnoreCase("POLES"))
+			return tokens.InvalidToken();
+		
+		String currentPoleId = tokens.getNext();
+		if(currentPoleId == null)
+			return tokens.InvalidToken();
+		
+		while(currentPoleId != null) {
+			if(!Checks.checkID(currentPoleId))
+				return tokens.InvalidToken();
+			
+			poleIds.add(currentPoleId);
+			currentPoleId = tokens.getNext();
+		}
+	
+		return new CommandCreatePowerCatenary(id, poleIds);
 	}
 	
 	private A_Command powerPole() {
