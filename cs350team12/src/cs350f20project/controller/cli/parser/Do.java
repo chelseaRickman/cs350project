@@ -2,6 +2,7 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
 
 /*
 This class handles all the DO commands
@@ -104,10 +105,43 @@ public class Do extends ParserBase{
 		/* 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
 		 * 15 DO SET id SPEED number
 		 * When entering this method, the token param should be the id at this point so ensure that is the case
-		 * Can create private helper methods for each of these rules, can use Tokenizer.get(index) to see if "DIRECTION" or "SPEED"
+		 * Get next token to see if it is DIRECTION or SPEED and then call the corresponding method
 		 * if neither "DIRECTION" or "SPEED", then invalid token
 		 */
+		if(!Checks.checkID(id))
+			return tokens.InvalidToken();
 		
+		String directionOrSpeed = tokens.getNext();
+		if(directionOrSpeed == null)
+			return tokens.InvalidToken();
+		if(directionOrSpeed.equalsIgnoreCase("DIRECTION"))
+			return setIdDirection(id);
+		else if(directionOrSpeed.equalsIgnoreCase("SPEED"))
+			return setIdSpeed(id);
+		
+		return tokens.InvalidToken();
+	}
+	
+	// setId helper methods
+	
+	private A_Command setIdDirection(String id) {
+		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		boolean isForward = false;
+		String direction = tokens.getNext();
+		if(direction.equalsIgnoreCase("FORWARD")) {
+			isForward = true;
+		}
+		
+		System.out.println("ID: " + id + "Direction: " + direction + "isForward: " + isForward);
+		return new CommandBehavioralSetDirection(id, isForward);
+	}
+	
+	private A_Command setIdSpeed(String id) {
+		// 15 DO SET id SPEED number
 		return null;
 	}
 	
