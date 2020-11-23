@@ -2,9 +2,11 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectRoundhouse;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetReference;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetSpeed;
+import cs350f20project.datatype.Angle;
 
 /*
 This class handles all the DO commands
@@ -86,7 +88,34 @@ public class Do extends ParserBase{
 	private A_Command selectRoundhouse() {
 		// 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
 		// When entering this method, tokens.getNext() should be id
-		return null;
+		String id = tokens.getNext();
+		if(!Checks.checkID(id)) {
+			return tokens.InvalidToken();
+		}
+		
+		String positionText = tokens.getNext();
+		if(positionText == null || !positionText.equalsIgnoreCase("POSITION"))
+			return tokens.InvalidToken();
+		
+		String stringAngle = tokens.getNext();
+		if(stringAngle == null)
+			return tokens.InvalidToken();
+		
+		Angle angle = new Angle(Double.parseDouble(stringAngle));
+		// Check for valid angle?
+		
+		boolean isClockwise = false;
+		String direction = tokens.getNext();
+		if(direction == null)
+			return tokens.InvalidToken();
+		// check valid direction?
+		if(direction.equalsIgnoreCase("CLOCKWISE")) {
+			isClockwise = true;
+		}
+		
+		System.out.println("ID: " + id + " Angle: " + angle + "Direction: " + direction + "isClockwise: " + isClockwise);
+		
+		return new CommandBehavioralSelectRoundhouse(id, angle, isClockwise);
 	}
 	
 	private A_Command selectSwitch() {

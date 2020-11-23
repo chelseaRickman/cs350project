@@ -17,6 +17,7 @@ public class Engine extends ParserBase {
 		return checkArgs(token);
 	}
 	
+	//MOVED
 	public A_Command setReference() {
 		String token = tokens.getNext();
 		
