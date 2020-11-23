@@ -97,6 +97,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	
 	public void use() {
 		//66 USE id AS REFERENCE coordinates_world
+		//when entering this method tokens.getNext() should be the id
 	}
 	
 	public void closeView() {

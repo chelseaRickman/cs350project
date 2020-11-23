@@ -34,14 +34,6 @@ public class Do extends ParserBase{
 		}
 		return checkArgs(token);
 	}
-
-	public A_Command brake(Tokenizer tokens) {
-		String token = tokens.getNext();
-		if(!isStringStandardJavVar(token.substring(0, 1)))
-			return tokens.InvalidToken();
-		return new CommandBehavioralBrake(token);
-		
-	}
 	
 	// Determines which SELECT method needs to be called
 	public A_Command doSelect() {
@@ -66,24 +58,37 @@ public class Do extends ParserBase{
 		if(nextToken.equalsIgnoreCase("REFERENCE"))
 			return setReference();
 		else {
-			return setId();
+			return setId(nextToken);
 		}
+	}
+	
+	
+	public A_Command brake(Tokenizer tokens) {
+		// 2  DO BRAKE id
+		String token = tokens.getNext();
+		if(!isStringStandardJavVar(token.substring(0, 1)))
+			return tokens.InvalidToken();
+		return new CommandBehavioralBrake(token);
+		
 	}
 	
 	// DO SELECT commands
 	
 	private A_Command selectDrawbridge() {
 		// 6  DO SELECT DRAWBRIDGE id POSITION ( UP | DOWN )
+		// When entering this method, tokens.getNext() should be id
 		return null;
 	}
 	
 	private A_Command selectRoundhouse() {
 		// 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
+		// When entering this method, tokens.getNext() should be id
 		return null;
 	}
 	
 	private A_Command selectSwitch() {
 		// 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
+		// When entering this method, tokens.getNext() should be id
 		return null;
 	}
 	
@@ -91,12 +96,14 @@ public class Do extends ParserBase{
 	
 	private A_Command setReference() {
 		// 12 DO SET REFERENCE ENGINE id
+		// When entering this method, tokens.getNext() should be "ENGINE"
 		return null;
 	}
 	
-	private A_Command setId() {
+	private A_Command setId(String id) {
 		/* 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
 		 * 15 DO SET id SPEED number
+		 * When entering this method, the token param should be the id at this point so ensure that is the case
 		 * Can create private helper methods for each of these rules, can use Tokenizer.get(index) to see if "DIRECTION" or "SPEED"
 		 * if neither "DIRECTION" or "SPEED", then invalid token
 		 */
