@@ -18,11 +18,9 @@ public class Tokenizer {
 		tokens = new ArrayList<String>();
 		args = new ArrayList<ArrayList<String>>();
 		args.add(new ArrayList<String>());
-		String[] tokengetter = commandText.split(" ");
+		String[] tokengetter = commandText.split("\\s+");
 		for(String token : tokengetter) {
-			if(token != " ") {
-				tokens.add(token);
-			}
+				tokens.add(token.trim());
 		}
 	}
 	
