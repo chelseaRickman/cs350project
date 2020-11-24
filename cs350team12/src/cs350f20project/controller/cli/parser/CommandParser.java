@@ -39,8 +39,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	public void parse(){
-		for(Tokenizer tokenizer: this.tokenizers) {
-			Tokenizer tokens = tokenizer;
+		for(Tokenizer tokens: this.tokenizers) {
 			String token = tokens.getNext();
 
 			if(token == null)
