@@ -8,10 +8,12 @@ public class Tokenizer {
 	private ArrayList<String> tokens;
 	int arg;
 	private MyParserHelper parser;
+	private int next;
 	
 	//seperate commandtext into an arraylist, removing any blanks, just like a real parser.
 	public Tokenizer(String commandText, MyParserHelper helper) {
 		arg = 0;
+		this.next = 0;
 		tokens = new ArrayList<String>();
 		String[] tokengetter = commandText.split("\\s+");
 		for(String token : tokengetter) {
@@ -20,11 +22,16 @@ public class Tokenizer {
 		}
 	}
 	
-	//remove the tokenlist as we read through
+	//Returns the String contained in tokens that the index next is currently pointing to, then advances next 1
 	public String getNext() {
 		if(tokens.size() == 0)
 			return null;
-		return tokens.remove(0);
+		
+		int currentIndex = this.next;
+		if(currentIndex >= this.tokens.size())
+			return null;
+		this.next++;
+		return tokens.get(currentIndex);
 	}
 	
 	//probably wont need this but just in case
