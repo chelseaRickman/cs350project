@@ -69,7 +69,7 @@ public class Tester {
 		CoordinatesWorld delt = Checks.parseCoordinatesWorld(testarr, false);
 		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-		String commandText = " CREATE POWER STATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH SUBSTATION idn+";
+		String commandText = "CREATE STOCK CAR id AS TANK";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 

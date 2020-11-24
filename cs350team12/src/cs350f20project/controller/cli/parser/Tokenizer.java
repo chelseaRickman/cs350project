@@ -6,7 +6,6 @@ import cs350f20project.controller.command.A_Command;
 //The tokenizer class is the core of the parser.
 public class Tokenizer {
 	private ArrayList<String> tokens;
-	private ArrayList<String> cmds;
 	private ArrayList<ArrayList<String>> args;
 	int arg;
 	private String lasttoken;
@@ -14,12 +13,11 @@ public class Tokenizer {
 	public Tokenizer(String commandText) {
 		arg = 0;
 		args= new ArrayList<ArrayList<String>>();
-		cmds = new ArrayList<String>();
 		tokens = new ArrayList<String>();
-		args = new ArrayList<ArrayList<String>>();
 		args.add(new ArrayList<String>());
 		String[] tokengetter = commandText.split("\\s+");
 		for(String token : tokengetter) {
+			if(token != " ")
 				tokens.add(token.trim());
 		}
 	}
@@ -51,11 +49,6 @@ public class Tokenizer {
 		return args.get(arg);
 	}
 	
-	//A list of commands is kept so we can reference any of the commands we have been given. Currently, it is mostly used for getting the last command in getLast().
-	//Don't worry about this.
-	public void addCmd(String token) {
-		cmds.add(token);
-	}
 	
 	//Adds an arg to the arglist we are currently using.
 	//Don't worry about this.
@@ -70,13 +63,6 @@ public class Tokenizer {
 		}
 	}
 	
-	//Don't worry about this
-	public void setLast() {
-		if(cmds.size()>1)
-			lasttoken = cmds.get(cmds.size()-2);
-		else
-			lasttoken = null;
-	}
 	
 	//gets the last command that was executed. Remember, token != command != argument. A command is one of the capitalized words, like DO and SET.
 	public String getLast() {
@@ -85,7 +71,7 @@ public class Tokenizer {
 	
 	//make it easy to call exception throws like invalid token. Return this at the bottom of every parse function.
 	public A_Command invalidToken() throws RuntimeException{
-			throw new RuntimeException("Error! invalid token!");
+			throw new RuntimeException("Error! invalid token! ");
 		
 	}
 	

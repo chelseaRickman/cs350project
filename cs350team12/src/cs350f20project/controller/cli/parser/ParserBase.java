@@ -12,9 +12,6 @@ public class ParserBase {
 	//Don't worry about this.
 	public ParserBase(Tokenizer tokens) {
 		this.tokens = tokens;
-		tokens.addCmd(tokens.getLast());
-		tokens.setLast();
-		tokens.addCmd(this.getClass().getSimpleName());
 		tokens.nextArgList();
 	}
 	

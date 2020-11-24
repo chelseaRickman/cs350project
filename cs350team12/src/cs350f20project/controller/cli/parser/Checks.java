@@ -16,7 +16,10 @@ public class Checks {
 		if(!id.startsWith("$") && reference == true)
 			throw new RuntimeException("Error! Id references should start with $!");
 		//check this for alphanumerics
-		String check = id.substring(1);
+		if(reference == true) {
+			String check = id.substring(1);
+			return isStringStandardJavVar(check);
+		}
 		return true;
 	}
 	public static boolean expectedString(String check, String expect) {
@@ -95,6 +98,6 @@ public class Checks {
 	//Check for standard Java variable name, underscore included
 	public static boolean isStringStandardJavVar(String str) 
 	{ 
-	    return (str.matches("[a-zA-Z_$]")); 
+	    return (str.matches("[a-zA-Z_$]"));
 	}
 }

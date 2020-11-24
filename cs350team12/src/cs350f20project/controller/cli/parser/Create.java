@@ -5,14 +5,8 @@ import java.util.List;
 
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
-import cs350f20project.controller.command.creational.CommandCreatePowerCatenary;
-import cs350f20project.controller.command.creational.CommandCreatePowerPole;
-import cs350f20project.controller.command.creational.CommandCreatePowerStation;
-import cs350f20project.controller.command.creational.CommandCreatePowerSubstation;
-import cs350f20project.datatype.CoordinatesDelta;
-import cs350f20project.datatype.CoordinatesWorld;
-import cs350f20project.datatype.Latitude;
-import cs350f20project.datatype.Longitude;
+import cs350f20project.controller.command.creational.*;
+import cs350f20project.datatype.*;
 
 /*
  * This class handles all the CREATE commands
@@ -228,8 +222,7 @@ public class Create extends ParserBase{
 		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
 		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
 		String id1 = tokens.getNext();
-		if(!Checks.checkID(id1, true))
-			return tokens.invalidToken();
+		Checks.checkID(id1, true);
 
 		String token = tokens.getNext();
 		while(!token.equalsIgnoreCase("DELTA")) {
@@ -267,8 +260,7 @@ public class Create extends ParserBase{
 		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
 		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
 		String id1 = tokens.getNext();
-		if(!Checks.checkID(id1, true))
-			return tokens.invalidToken();
+		Checks.checkID(id1, true);
 
 		String token = tokens.getNext();
 		while(!token.equalsIgnoreCase("DELTA")) {
@@ -319,40 +311,34 @@ public class Create extends ParserBase{
 		33 CREATE STOCK CAR id AS TENDER CommandCreateStockCarTender
 			return stockCarTender();
 		*/
-		return null;
+		String token = tokens.getNext();
+		System.out.println(token);
+		if(!Checks.checkID(token, false))
+			return tokens.invalidToken();
+		String id = token;
+		token = tokens.getNext();
+		if(!token.equalsIgnoreCase("AS"))
+			return tokens.invalidToken();
+		token = tokens.getNext();
+		//Switch case changes token to uppercase and then compares it to possible final tokens
+		switch(token.toUpperCase()) {
+		case "BOX":
+			return new CommandCreateStockCarBox(id);
+		case "CABOOSE":
+			return new CommandCreateStockCarCaboose(id);
+		case "FLATBED":
+			return new CommandCreateStockCarFlatbed(id);
+		case "PASSENGER":
+			return new CommandCreateStockCarPassenger(id);
+		case "TANK": 
+			return new CommandCreateStockCarTank(id);
+		case "TENDER":
+			return new CommandCreateStockCarTender(id);
+		default:
+			return tokens.invalidToken();
+		}
 	}
 	
-	// stockCar helper methods
-	
-	private A_Command stockCarBox() {
-		//28 CREATE STOCK CAR id AS BOX CommandCreateStockCarBox
-		return null;
-	}
-	
-	private A_Command stockCarCaboose() {
-		// 29 CREATE STOCK CAR id AS CABOOSE CommandCreateStockCarCaboose
-		return null;
-	}
-	
-	private A_Command stockCarFlatbed() {
-		// 30 CREATE STOCK CAR id AS FLATBED CommandCreateStockCarFlatbed
-		return null;
-	}
-	
-	private A_Command stockCarPassenger() {
-		// 31 CREATE STOCK CAR id AS PASSENGER CommandCreateStockCarPassenger
-		return null;
-	}
-	
-	private A_Command stockCarTank() {
-		// 32 CREATE STOCK CAR id AS TANK CommandCreateStockCarTank
-		return null;
-	}
-	
-	private A_Command stockCarTender() {
-		// 33 CREATE STOCK CAR id AS TENDER CommandCreateStockCarTender
-		return null;
-	}
 	
 	
 	
