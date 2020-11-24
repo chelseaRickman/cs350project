@@ -34,7 +34,6 @@ public class Tokenizer {
 		return tokens.get(currentIndex);
 	}
 	
-	//probably wont need this but just in case
 	public String get(int index) {
 		return tokens.get(index);
 	}
