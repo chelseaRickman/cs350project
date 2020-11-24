@@ -69,7 +69,7 @@ public class Tester {
 		CoordinatesWorld delt = Checks.parseCoordinatesWorld(testarr, false);
 		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-		String commandText = "CREATE STOCK CAR id AS TANK";
+		String commandText = "CREATE STOCK CAR id AS TANK;CREATE STOCK CAR id AS BOX";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 

@@ -25,17 +25,17 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 67 Rule#2 through Rule#65
 */
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
-		//texts = commandText.split(";");
+		texts = commandText.split(";");
 		this.parserHelper = parserHelper;
-		this.tokens = new Tokenizer(commandText);
 		
 	}
 
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	// Still need to account for multiple commands separated by semi-colon
-	public void parse() {
-//		for(int i = 0; i < texts.length; ++i) {
+	public void parse(){
+		for(int i = 0; i < texts.length; ++i) {
+			this.tokens = new Tokenizer(texts[i]);
 			String token = tokens.getNext();
 			if(token == null)
 				throw new RuntimeException("Error! Invalid token!");
@@ -65,7 +65,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else {
 				throw new RuntimeException("Error! Invalid token!");
 			}
-		
+		}
 	}
 	
 	//parses the tokens through an instance of the class CREATE
