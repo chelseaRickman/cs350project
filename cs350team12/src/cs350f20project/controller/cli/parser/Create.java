@@ -312,7 +312,6 @@ public class Create extends ParserBase{
 			return stockCarTender();
 		*/
 		String token = tokens.getNext();
-		System.out.println(token);
 		if(!Checks.checkID(token, false))
 			return tokens.invalidToken();
 		String id = token;
