@@ -27,6 +27,7 @@ public class Checks {
 			return true;
 		return false;
 	}
+	
 	public static boolean booleanFromString(String check, String t, String f) {
 		if(check.equalsIgnoreCase(t))
 			return true;
@@ -35,7 +36,7 @@ public class Checks {
 		throw new RuntimeException("Error! invalid token!");
 	}
 	
-	public static CoordinatesWorld parseCoordinatesWorld(ArrayList<String> list, boolean canBeReference) {
+	public static CoordinatesWorld parseCoordinatesWorld(ArrayList<String> list, boolean canBeReference, MyParserHelper parser) {
 		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
 		//Check based on length. ID should be length one, Lat/Lon doubles should be length 3 x / y, Full writeouts should be length 12 x * y ' z ".
 		if(list.size() == 1  && canBeReference) {
@@ -44,8 +45,9 @@ public class Checks {
 				throw new RuntimeException("Error! Invalid token!");
 			String id2 = list.get(0);
 			Checks.checkID(id2, true);
-			MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-			coords = parserHelper.getReference(id2);
+			
+			coords = parser.getReference(id2);
+			parser.addReference(id2, coords);
 		}
 		//parse a lat long /
 		else if(list.size() == 3) {

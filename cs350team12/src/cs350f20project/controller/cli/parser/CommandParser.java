@@ -35,7 +35,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	// Still need to account for multiple commands separated by semi-colon
 	public void parse(){
 		for(int i = 0; i < texts.length; ++i) {
-			this.tokens = new Tokenizer(texts[i]);
+			this.tokens = new Tokenizer(texts[i], parserHelper);
 			String token = tokens.getNext();
 			if(token == null)
 				throw new RuntimeException("Error! Invalid token!");

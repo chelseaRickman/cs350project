@@ -231,7 +231,7 @@ public class Create extends ParserBase{
 			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(world, true);
+		coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
 		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
 		while(!token.equalsIgnoreCase("WITH")){
@@ -271,7 +271,7 @@ public class Create extends ParserBase{
 			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(world, true);
+		coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
 		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
 		while(!token.equalsIgnoreCase("WITH")){

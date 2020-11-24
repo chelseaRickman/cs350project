@@ -7,9 +7,10 @@ import cs350f20project.controller.command.A_Command;
 public class Tokenizer {
 	private ArrayList<String> tokens;
 	int arg;
-	private String lasttoken;
+	private MyParserHelper parser;
+	
 	//seperate commandtext into an arraylist, removing any blanks, just like a real parser.
-	public Tokenizer(String commandText) {
+	public Tokenizer(String commandText, MyParserHelper helper) {
 		arg = 0;
 		tokens = new ArrayList<String>();
 		String[] tokengetter = commandText.split("\\s+");
@@ -36,10 +37,8 @@ public class Tokenizer {
 		return tokens.size();
 	}
 	
-	
-	//gets the last command that was executed. Remember, token != command != argument. A command is one of the capitalized words, like DO and SET.
-	public String getLast() {
-		return lasttoken;
+	public MyParserHelper getParser() {
+		return parser;
 	}
 	
 	//make it easy to call exception throws like invalid token. Return this at the bottom of every parse function.
