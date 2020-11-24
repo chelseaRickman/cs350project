@@ -6,15 +6,12 @@ import cs350f20project.controller.command.A_Command;
 //The tokenizer class is the core of the parser.
 public class Tokenizer {
 	private ArrayList<String> tokens;
-	private ArrayList<ArrayList<String>> args;
 	int arg;
 	private String lasttoken;
 	//seperate commandtext into an arraylist, removing any blanks, just like a real parser.
 	public Tokenizer(String commandText) {
 		arg = 0;
-		args= new ArrayList<ArrayList<String>>();
 		tokens = new ArrayList<String>();
-		args.add(new ArrayList<String>());
 		String[] tokengetter = commandText.split("\\s+");
 		for(String token : tokengetter) {
 			if(token != " ")
@@ -37,30 +34,6 @@ public class Tokenizer {
 	//get size of tokenizer. Length is size-1
 	public int size() {
 		return tokens.size();
-	}
-	
-	//get one of the argument lists.
-	/*Argument lists can be confusing, but as an example:
-	say we we enter "DO SET id SPEED 1"
-	In this case getArgs(0) would return the list [id]
-	and getArgs(1) would return the list [1]
-	This helps because in the future we will have lists of multiple arguments (lists of lists)*/
-	public ArrayList<String> getArgs(int arg){
-		return args.get(arg);
-	}
-	
-	
-	//Adds an arg to the arglist we are currently using.
-	//Don't worry about this.
-	public void addArg(String token) {
-		args.get(arg).add(token);
-	}
-	
-	public void nextArgList() {
-		if(!getArgs(arg).isEmpty()) {
-			arg+=1;
-			args.add(new ArrayList<String>());
-		}
 	}
 	
 	

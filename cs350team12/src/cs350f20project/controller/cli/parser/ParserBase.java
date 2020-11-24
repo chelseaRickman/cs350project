@@ -12,14 +12,12 @@ public class ParserBase {
 	//Don't worry about this.
 	public ParserBase(Tokenizer tokens) {
 		this.tokens = tokens;
-		tokens.nextArgList();
 	}
 	
 	//verifyArg checks if a token can be added as an argument. If there are no more tokens, this return false.
 	//In the case that a command ends, you can check if verifyArg returns false
 	public boolean verifyArg(String token) {
 		if(token!=null) {
-			tokens.addArg(token);
 			return true;
 		}
 		return false;

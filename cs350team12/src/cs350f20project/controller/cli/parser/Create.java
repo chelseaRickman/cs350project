@@ -225,18 +225,21 @@ public class Create extends ParserBase{
 		Checks.checkID(id1, true);
 
 		String token = tokens.getNext();
+		ArrayList<String> world = new ArrayList<String>();
 		while(!token.equalsIgnoreCase("DELTA")) {
 			verifyArg(token);
+			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(tokens.getArgs(0), true);
+		coords = Checks.parseCoordinatesWorld(world, true);
+		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
-		tokens.nextArgList();
 		while(!token.equalsIgnoreCase("WITH")){
 			verifyArg(token);
+			delts.add(token);
 			token = tokens.getNext();
 		}
-		deltas = Checks.parseCoordinatesDelta(tokens.getArgs(1));
+		deltas = Checks.parseCoordinatesDelta(delts);
 		token = tokens.getNext();
 		boolean suborsubs = Checks.booleanFromString(token, "SUBSTATION", "SUBSTATIONS");
 		token = tokens.getNext();
@@ -261,20 +264,22 @@ public class Create extends ParserBase{
 		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
 		String id1 = tokens.getNext();
 		Checks.checkID(id1, true);
-
+		ArrayList<String> world = new ArrayList<String>();
 		String token = tokens.getNext();
 		while(!token.equalsIgnoreCase("DELTA")) {
 			verifyArg(token);
+			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(tokens.getArgs(0), true);
+		coords = Checks.parseCoordinatesWorld(world, true);
+		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
-		tokens.nextArgList();
 		while(!token.equalsIgnoreCase("WITH")){
 			verifyArg(token);
+			delts.add(token);
 			token = tokens.getNext();
 		}
-		deltas = Checks.parseCoordinatesDelta(tokens.getArgs(1));
+		deltas = Checks.parseCoordinatesDelta(delts);
 		token = tokens.getNext();
 		if(token.equalsIgnoreCase("CATENARIES"))
 			return tokens.invalidToken();
