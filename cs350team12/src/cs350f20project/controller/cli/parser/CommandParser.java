@@ -1,6 +1,8 @@
 package cs350f20project.controller.cli.parser;
 
 
+import java.util.ArrayList;
+
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
@@ -8,8 +10,7 @@ import cs350f20project.controller.command.structural.CommandStructuralCommit;
 public class CommandParser {
 	
 	private MyParserHelper parserHelper;
-	private Tokenizer tokens;
-	private String[] texts;
+	private ArrayList<Tokenizer> tokenizers;
 	
 /*
 CommandParser contains all the misc commands. It passes the DO and CREATE commands to their respective classes
@@ -25,25 +26,30 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 67 Rule#2 through Rule#65
 */
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
-		texts = commandText.split(";");
+		
+		String[] commandTexts = commandText.split(";");
 		this.parserHelper = parserHelper;
 		
+		this.tokenizers = new ArrayList<Tokenizer>();
+		for(String command: commandTexts) {
+			tokenizers.add(new Tokenizer(command, parserHelper));
+		}
 	}
 
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
-	// Still need to account for multiple commands separated by semi-colon
 	public void parse(){
-		for(int i = 0; i < texts.length; ++i) {
-			this.tokens = new Tokenizer(texts[i], parserHelper);
+		for(Tokenizer tokenizer: this.tokenizers) {
+			Tokenizer tokens = tokenizer;
 			String token = tokens.getNext();
+
 			if(token == null)
 				throw new RuntimeException("Error! Invalid token!");
 			
 			if(token.equalsIgnoreCase("CREATE"))
-				createCommand();
+				createCommand(tokens);
 			else if(token.equalsIgnoreCase("DO"))
-				doCommand();
+				doCommand(tokens);
 			else if(token.equalsIgnoreCase("@EXIT"))
 				exit();
 			else if(token.equalsIgnoreCase("@RUN"))
@@ -69,13 +75,13 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	}
 	
 	//parses the tokens through an instance of the class CREATE
-	public void createCommand() {
+	public void createCommand(Tokenizer tokens) {
 		Create create = new Create(tokens);
 		this.parserHelper.getActionProcessor().schedule(create.parse());
 	}
 	
 	//parses the tokens through an instance of the class DO
-	public void doCommand() {
+	public void doCommand(Tokenizer tokens) {
 		Do d = new Do(tokens);
 		this.parserHelper.getActionProcessor().schedule(d.parse());
 	}
