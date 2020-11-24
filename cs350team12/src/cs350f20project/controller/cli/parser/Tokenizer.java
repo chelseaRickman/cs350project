@@ -15,14 +15,14 @@ public class Tokenizer {
 		arg = 0;
 		this.next = 0;
 		tokens = new ArrayList<String>();
+		
 		String[] tokengetter = commandText.split("\\s+");
 		for(String token : tokengetter) {
-			if(token != " ")
-				tokens.add(token.trim());
+			tokens.add(token.trim());
 		}
 	}
 	
-	//Returns the String contained in tokens that the index next is currently pointing to, then advances next 1
+	// Returns the String contained in tokens that the index next is currently pointing to, then advances next 1
 	public String getNext() {
 		if(tokens.size() == 0)
 			return null;

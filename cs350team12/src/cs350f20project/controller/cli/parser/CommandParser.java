@@ -32,7 +32,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		
 		this.tokenizers = new ArrayList<Tokenizer>();
 		for(String command: commandTexts) {
-			tokenizers.add(new Tokenizer(command, parserHelper));
+			tokenizers.add(new Tokenizer(command.trim(), parserHelper));
 		}
 	}
 
