@@ -116,23 +116,17 @@ public class Do extends ParserBase{
 	private A_Command selectSwitch() {
 		// 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
 		// When entering this method, tokens.getNext() should be id
-		String id = tokens.getNext();
-		if(tokens == null)
+		String id = tokens.get(3);
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
-		//need to check valid id
-//		if(!Checks.checkID(id)) {
-//			return tokens.invalidToken();
-//		}
-		
-		String pathText = tokens.getNext(); 
-		if(pathText == null || !pathText.equalsIgnoreCase("PATH"))
-			return tokens.invalidToken();
+		}
 		
 		boolean isPrimary = false;
-		String primaryOrSecondary = tokens.getNext();
-		if(primaryOrSecondary == null)
+		String primaryOrSecondary = tokens.get(5);
+		if(!Checks.checkStringIsOneOfTheseValues(primaryOrSecondary, new String[] {"PRIMARY", "SECONDARY"})) {
 			return tokens.invalidToken();
-		//Add check for two values, will ensure the token is at least one of the two
+		}
+		
 		if(primaryOrSecondary.equalsIgnoreCase("PRIMARY")) {
 			isPrimary = true;
 		}
