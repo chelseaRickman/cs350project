@@ -7,6 +7,7 @@ import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
+import cs350f20project.controller.command.structural.CommandStructuralUncouple;
 
 public class CommandParser {
 	
@@ -63,11 +64,11 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("OPEN"))
 				openView();
 			else if(token.equalsIgnoreCase("COUPLE"))
-				coupleStock(tokens);
+				coupleOrUncoupleStock(tokens, true);
 			else if(token.equalsIgnoreCase("LOCATE"))
 				locateStock();
 			else if(token.equalsIgnoreCase("UNCOUPLE"))
-				uncoupleStock();
+				coupleOrUncoupleStock(tokens, false);
 			else {
 				throw new RuntimeException("Error! Invalid token!");
 			}
@@ -121,8 +122,10 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		
 	}
 	
-	public void coupleStock(Tokenizer tokens) {
+	public void coupleOrUncoupleStock(Tokenizer tokens, boolean isCoupleElseUncouple) {
+		// Implements one of the two commands depending on the passed in boolean value: true is COUPLE, false is UNCOUPLE
 		// 61 COUPLE STOCK id1 AND id2
+		// 65 UNCOUPLE STOCK id1 AND id2
 		String stockId1 = tokens.get(2);
 		if(!Checks.checkID(stockId1, false)) {
 			tokens.invalidToken();
@@ -133,19 +136,19 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			tokens.invalidToken();
 		}
 		
-		System.out.println(stockId1 + stockId2);
-		this.parserHelper.getActionProcessor().schedule(new CommandStructuralCouple(stockId1, stockId2));
+		A_Command command;
+		if(isCoupleElseUncouple) {
+			command = new CommandStructuralCouple(stockId1, stockId2);
+		}
+		else {
+			command = new CommandStructuralUncouple(stockId1, stockId2);
+		}
+		
+		this.parserHelper.getActionProcessor().schedule(command);
 	}
 	
 	public void locateStock() {
 		// 62 LOCATE STOCK id1 ON TRACK id2 DISTANCE number FROM ( START | END )
 		// check token.getNext() is "STOCK" otherwise invalid token
 	}
-	
-	public void uncoupleStock() {
-		// 65 UNCOUPLE STOCK id1 AND id2
-		// check token.getNext() is "STOCK" otherwise invalid token
-	}
-	
-
 }
