@@ -137,6 +137,20 @@ public class Checks {
 		return true;
 	}
 	
+	// Checks that the given string equals one of the strings within the passed in String array
+	public static boolean checkStringIsOneOfTheseValues(String string, String[] values) {
+		if(string == null || values == null || values.length == 0)
+			return false;
+		
+		for(String value: values) {
+			if(string.equalsIgnoreCase(value)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	//Check for standard Java variable name, underscore included
 	public static boolean isStringStandardJavVar(String str) 
 	{ 
