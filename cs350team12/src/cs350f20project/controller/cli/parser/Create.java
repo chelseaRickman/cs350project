@@ -145,56 +145,32 @@ public class Create extends ParserBase{
 	private A_Command powerPole() {
 		// 23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
 		// When entering this method tokens.getNext() should be id1
-		String poleId = tokens.getNext();
-		//need to check valid id
-//		if(!Checks.checkID(poleId))
-//			return tokens.invalidToken();
+		String poleId = tokens.get(3);
+		if(!Checks.checkID(poleId, false)) {
+			return tokens.invalidToken();
+		}
 		
-		String onText = tokens.getNext();
-		if(onText == null)
+		String trackId = tokens.get(6);
+		if(!Checks.checkID(trackId, false)) {
 			return tokens.invalidToken();
-		if(!onText.equalsIgnoreCase("ON"))
-			return tokens.invalidToken();
+		}
 		
-		String trackText = tokens.getNext();
-		if(trackText == null)
+		String distanceFromString = tokens.get(8);
+		if(!Checks.checkStringIsDouble(distanceFromString)) {
 			return tokens.invalidToken();
-		if(!trackText.equalsIgnoreCase("TRACK"))
-			return tokens.invalidToken();
-		
-		String trackId = tokens.getNext();
-		if(trackId == null)
-			return tokens.invalidToken();
-		// need to check valid id
-//		if(!Checks.checkID(trackId))
-//			return tokens.invalidToken();
-		
-		String distanceText = tokens.getNext();
-		if(distanceText == null)
-			return tokens.invalidToken();
-		if(!distanceText.equalsIgnoreCase("DISTANCE"))
-			return tokens.invalidToken();
-		
-		String distanceFromString = tokens.getNext();
-		if(distanceFromString == null)
-			return tokens.invalidToken();
+		}
 		Double distanceFrom = Double.parseDouble(distanceFromString);
-		// check number?
 		
-		String fromText = tokens.getNext();
-		if(fromText == null)
-			return tokens.invalidToken();
-		if(!fromText.equalsIgnoreCase("FROM"))
-			return tokens.invalidToken();
-	
 		boolean isFromStart = false;
-		String startOrEnd = tokens.getNext();
-		if(startOrEnd == null)
+		String startOrEnd = tokens.get(10);
+		if(!Checks.checkStringIsOneOfTheseValues(startOrEnd, new String[] {"START", "END"})){
 			return tokens.invalidToken();
-		//Add check to ensure the token is either START or END
-		isFromStart = Checks.booleanFromString(startOrEnd, "START", "END");
+		}
 		
-		System.out.println(poleId + trackId + distanceFrom + isFromStart);
+		if(startOrEnd.equalsIgnoreCase("START")) {
+			isFromStart = true;
+		}
+		
 		return new CommandCreatePowerPole(poleId, new TrackLocator(trackId, distanceFrom, isFromStart));
 	}
 	
