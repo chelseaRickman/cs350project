@@ -148,21 +148,17 @@ public class Do extends ParserBase{
 	}
 	
 	private A_Command setId(String id) {
-		/* 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
-		 * 15 DO SET id SPEED number
-		 * When entering this method, the token param should be the id at this point so ensure that is the case
-		 * Get next token to see if it is DIRECTION or SPEED and then call the corresponding method
-		 * if neither "DIRECTION" or "SPEED", then invalid token
-		 */
-		if(id == null)
+		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
+		//15 DO SET id SPEED number
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
-		//need to check valid id
-//		if(!Checks.checkID(id))
-//			return tokens.invalidToken();
+		}
 		
-		String directionOrSpeed = tokens.getNext();
-		if(directionOrSpeed == null)
+		String directionOrSpeed = tokens.get(3);
+		if(!Checks.checkStringIsOneOfTheseValues(directionOrSpeed, new String[] {"DIRECTION", "SPEED"})) {
 			return tokens.invalidToken();
+		}
+		
 		if(directionOrSpeed.equalsIgnoreCase("DIRECTION"))
 			return setIdDirection(id);
 		else if(directionOrSpeed.equalsIgnoreCase("SPEED"))
@@ -176,20 +172,23 @@ public class Do extends ParserBase{
 	private A_Command setIdDirection(String id) {
 		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
 		boolean isForward = false;
-		String direction = tokens.getNext();
+		String direction = tokens.get(4);
+		if(!Checks.checkStringIsOneOfTheseValues(direction, new String[] {"FORWARD", "BACKWARD"}))
+			return tokens.invalidToken();
+		
 		if(direction.equalsIgnoreCase("FORWARD")) {
 			isForward = true;
 		}
 		
-		System.out.println("ID: " + id + "Direction: " + direction + "isForward: " + isForward);
 		return new CommandBehavioralSetDirection(id, isForward);
 	}
 	
 	private A_Command setIdSpeed(String id) {
 		// 15 DO SET id SPEED number
-		String number = tokens.getNext();
-		if(number == null)
+		String number = tokens.get(4);
+		if(!Checks.checkStringIsDouble(number)) {
 			return tokens.invalidToken();
+		}
 		
 		double speed = Double.parseDouble(number);
 		
