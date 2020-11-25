@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
+import cs350f20project.controller.command.structural.CommandStructuralCouple;
 
 public class CommandParser {
 	
@@ -62,7 +63,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("OPEN"))
 				openView();
 			else if(token.equalsIgnoreCase("COUPLE"))
-				coupleStock();
+				coupleStock(tokens);
 			else if(token.equalsIgnoreCase("LOCATE"))
 				locateStock();
 			else if(token.equalsIgnoreCase("UNCOUPLE"))
@@ -120,9 +121,20 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		
 	}
 	
-	public void coupleStock() {
+	public void coupleStock(Tokenizer tokens) {
 		// 61 COUPLE STOCK id1 AND id2
-		// check token.getNext() is "STOCK" otherwise invalid token
+		String stockId1 = tokens.get(2);
+		if(!Checks.checkID(stockId1, false)) {
+			tokens.invalidToken();
+		}
+		
+		String stockId2 = tokens.get(4);
+		if(!Checks.checkID(stockId2, false)) {
+			tokens.invalidToken();
+		}
+		
+		System.out.println(stockId1 + stockId2);
+		this.parserHelper.getActionProcessor().schedule(new CommandStructuralCouple(stockId1, stockId2));
 	}
 	
 	public void locateStock() {
