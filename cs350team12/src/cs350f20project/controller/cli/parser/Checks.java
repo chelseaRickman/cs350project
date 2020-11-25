@@ -123,6 +123,20 @@ public class Checks {
 		return new CoordinatesDelta(x, y);
 	}
 	
+	// Checks whether the provided String can be parsed to a double value
+	public static boolean checkStringIsDouble(String string) {
+		if(string == null)
+			return false;
+		try {
+			Double.parseDouble(string);
+		}
+		catch(Exception e) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	//Check for standard Java variable name, underscore included
 	public static boolean isStringStandardJavVar(String str) 
 	{ 
