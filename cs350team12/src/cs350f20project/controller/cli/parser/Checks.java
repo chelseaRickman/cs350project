@@ -2,6 +2,8 @@ package cs350f20project.controller.cli.parser;
 
 import java.util.ArrayList;
 
+import javax.lang.model.SourceVersion;
+
 import cs350f20project.controller.ActionProcessor;
 import cs350f20project.controller.Controller;
 import cs350f20project.controller.cli.CommandLineInterface;
@@ -11,17 +13,27 @@ import cs350f20project.datatype.Latitude;
 import cs350f20project.datatype.Longitude;
 
 public class Checks {
-	//will check valid id and wether it starts with $
+	//will check valid id and whether it starts with $ if the id is a reference
 	public static boolean checkID(String id, boolean reference) {
-		if(!id.startsWith("$") && reference == true)
-			throw new RuntimeException("Error! Id references should start with $!");
-		//check this for alphanumerics
-		if(reference == true) {
-			String check = id.substring(1);
-			return isStringStandardJavVar(check);
+		if(id == null)
+			return false;
+		
+		String toCheck;
+		if(reference) {
+			if(id.startsWith("$")) {
+				toCheck = id.substring(1);
+			}
+			else {
+				return false;
+			}
 		}
-		return true;
+		else {
+			toCheck = id;
+		}
+		
+		return isStringStandardJavVar(toCheck);
 	}
+	
 	public static boolean expectedString(String check, String expect) {
 		if(check.equalsIgnoreCase(expect))
 			return true;
@@ -114,6 +126,6 @@ public class Checks {
 	//Check for standard Java variable name, underscore included
 	public static boolean isStringStandardJavVar(String str) 
 	{ 
-	    return (str.matches("[a-zA-Z_$]"));
+		return SourceVersion.isName(str);
 	}
 }
