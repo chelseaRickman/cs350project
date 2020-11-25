@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
+import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
@@ -60,7 +61,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("USE"))
 				use();
 			else if(token.equalsIgnoreCase("CLOSE"))
-				closeView();
+				closeView(tokens);
 			else if(token.equalsIgnoreCase("OPEN"))
 				openView();
 			else if(token.equalsIgnoreCase("COUPLE"))
@@ -110,10 +111,14 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		//when entering this method tokens.getNext() should be the id
 	}
 	
-	public void closeView() {
+	public void closeView(Tokenizer tokens) {
 		// 55 CLOSE VIEW id
-		// check to make sure the next token is in fact "VIEW" otherwise invalid token
+		String id = tokens.get(2);
+		if(!Checks.checkID(id, false)) {
+			tokens.invalidToken();
+		}
 		
+		this.parserHelper.getActionProcessor().schedule(new CommandMetaViewDestroy(id));	
 	}
 	
 	public void openView() {
