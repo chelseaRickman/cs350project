@@ -122,39 +122,21 @@ public class Create extends ParserBase{
 	private A_Command powerCatenary() {
 		// 22 CREATE POWER CATENARY id1 WITH POLES idn+
 		// When entering this method tokens.getNext() should be id1
-		String id = tokens.getNext();
-		if(id == null)
+		String id = tokens.get(3);
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
-		//Need to check valid id
-//		if(!Checks.checkID(id)) {
-//			return tokens.invalidToken();
-//		}
+		}
 		
 		List<String> poleIds = new ArrayList<String>();
-		
-		String withText = tokens.getNext();
-		if(withText == null)
-			return tokens.invalidToken();
-		if(!withText.equalsIgnoreCase("WITH"))
-			return tokens.invalidToken();
-		
-		String polesText = tokens.getNext();
-		if(polesText == null)
-			return tokens.invalidToken();
-		if(!polesText.equalsIgnoreCase("POLES"))
-			return tokens.invalidToken();
-		
-		String currentPoleId = tokens.getNext();
-		if(currentPoleId == null)
-			return tokens.invalidToken();
-		
-		while(currentPoleId != null) {
-			//Need to check valid ID
-//			if(!Checks.checkID(currentPoleId))
-//				return tokens.invalidToken();
+
+		String currentPoleId;
+		for(int i = 6; i < tokens.size(); i++) {
+			currentPoleId = tokens.get(i);
+			
+			if(!Checks.checkID(currentPoleId, false))
+				return tokens.invalidToken();
 			
 			poleIds.add(currentPoleId);
-			currentPoleId = tokens.getNext();
 		}
 	
 		return new CommandCreatePowerCatenary(id, poleIds);
