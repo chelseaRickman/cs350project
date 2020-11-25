@@ -138,19 +138,11 @@ public class Do extends ParserBase{
 	
 	private A_Command setReference() {
 		// 12 DO SET REFERENCE ENGINE id
-		// When entering this method, tokens.getNext() should be "ENGINE"
-		String engineText = tokens.getNext();
-		if(engineText == null)
+		// When entering this method, tokens.getNext() should be "ENGINE"	
+		String id = tokens.get(4);
+		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
-		if(!engineText.equalsIgnoreCase("ENGINE"))
-			return tokens.invalidToken();
-		
-		String id = tokens.getNext();
-		if(id == null)
-			return tokens.invalidToken();
-		//need to check valid id
-//		if(!Checks.checkID(id))
-//			return tokens.invalidToken();
+		}
 		
 		return new CommandBehavioralSetReference(id);
 	}
