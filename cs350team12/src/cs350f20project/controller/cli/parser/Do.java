@@ -194,11 +194,4 @@ public class Do extends ParserBase{
 		
 		return new CommandBehavioralSetSpeed(id, speed);
 	}
-	
-	//Check for standard Java variable name, underscore included
-	public boolean isStringStandardJavVar(String str) 
-	{ 
-	    return (str.matches("[a-zA-Z_$]")); 
-	}
-
 }
