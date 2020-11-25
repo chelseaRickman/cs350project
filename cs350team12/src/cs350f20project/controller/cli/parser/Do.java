@@ -72,8 +72,9 @@ public class Do extends ParserBase{
 	public A_Command brake(Tokenizer tokens) {
 		// 2  DO BRAKE id
 		String token = tokens.getNext();
-		if(!Checks.isStringStandardJavVar(token.substring(0, 1)))
+		if(!Checks.checkID(token, false)) {
 			return tokens.invalidToken();
+		}
 		return new CommandBehavioralBrake(token);
 		
 	}
