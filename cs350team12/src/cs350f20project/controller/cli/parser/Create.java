@@ -307,7 +307,41 @@ public class Create extends ParserBase{
 	private A_Command stockEngine() {
 		// 34 CREATE STOCK ENGINE id1 AS DIESEL ON TRACK id2 DISTANCE number FROM ( START | END ) FACING ( START | END ) CommandCreateStockEngineDiesel
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		String engineId = tokens.get(3);
+		if(!Checks.checkID(engineId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		String trackId = tokens.get(8);
+		if(!Checks.checkID(trackId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		String distanceFromString = tokens.get(10);
+		if(!Checks.checkStringIsDouble(distanceFromString)) {
+			return tokens.invalidToken();
+		}
+		Double distance = Double.parseDouble(distanceFromString);
+		
+		boolean isFromStart = false;
+		String fromDirection = tokens.get(12);
+		if(!Checks.checkStringIsOneOfTheseValues(fromDirection, new String[] {"START", "END"})) {
+			return tokens.invalidToken();
+		}
+		if(fromDirection.equalsIgnoreCase("START")) {
+			isFromStart = true;
+		}
+		
+		boolean isFacingStart = false;
+		String facingDirection = tokens.get(14);
+		if(!Checks.checkStringIsOneOfTheseValues(facingDirection, new String[] {"START", "END"})) {
+			return tokens.invalidToken();
+		}
+		if(facingDirection.equalsIgnoreCase("START")) {
+			isFacingStart = true;
+		}
+		
+		return new CommandCreateStockEngineDiesel(engineId, new TrackLocator(trackId, distance, isFromStart), isFacingStart);
 	}
 	
 	// CREATE TRACK commands
