@@ -58,17 +58,24 @@ public class Tester {
 
 	public static void main(String[] args) {
 		/*ArrayList<String> testarr = new ArrayList();
-		for(int i = 0; i < 2; ++i) {
 		testarr.add("1");
 		testarr.add("*");
 		testarr.add("1");
 		testarr.add("'");
 		testarr.add("1.0");
 		testarr.add("\"");
-		}
-		CoordinatesWorld delt = Checks.parseCoordinatesWorld(testarr, false);
+		testarr.add("/");
+		testarr.add("1");
+		testarr.add("*");
+		testarr.add("1");
+		testarr.add("'");
+		testarr.add("1.0");
+		testarr.add("\"");
+		String teststring = "46*40'58\"/117*19'21\"";
+		CoordinatesWorld delt = Checks.parseCoordinatesWorld(teststring, false, parserHelper);
 		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
+
 		String commandText = "CREATE STOCK CAR id AS TANK;CREATE STOCK CAR id AS BOX";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();

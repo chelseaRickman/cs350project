@@ -37,64 +37,78 @@ public class Checks {
 	}
 	
 	public static CoordinatesWorld parseCoordinatesWorld(ArrayList<String> list, boolean canBeReference, MyParserHelper parser) {
+		String conv = "";
+		for(int i = 0; i < list.size(); ++i) {
+			conv+=list.get(i);
+		}
 		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
 		//Check based on length. ID should be length one, Lat/Lon doubles should be length 3 x / y, Full writeouts should be length 12 x * y ' z ".
-		if(list.size() == 1  && canBeReference) {
+		if(conv.startsWith("$")  && canBeReference) {
 			
 			if(!list.get(0).startsWith("$"))
 				throw new RuntimeException("Error! Invalid token!");
 			String id2 = list.get(0);
 			Checks.checkID(id2, true);
-			
-			coords = parser.getReference(id2);
 			parser.addReference(id2, coords);
+			coords = parser.getReference(id2);
+			
 		}
-		//parse a lat long /
-		else if(list.size() == 3) {
-			double x= Double.parseDouble(list.get(0));
-			if(list.get(1) != "/")
+		else {
+			if(!conv.contains("/"))
 				throw new RuntimeException("Error! Invalid token!");
-			double y = Double.parseDouble(list.get(2));
-			coords = new CoordinatesWorld(new Latitude(x), new Longitude(y));
-		}
-		//parse the ultimate: A full writeout
-		else if(list.size() == 12) {
-			int x1, x2;
-			double x3;
-			int y1, y2;
-			double y3;
-			//try to remove any non-relevant coords
-			try {
-				list.remove("*");
-				list.remove("*");
-				list.remove("'");
-				list.remove("'");
-				list.remove("\"");
-				list.remove("\"");
-			} catch (Exception e) {
-				throw new RuntimeException("Error! Invalid token!");
-			}
-			x1 = Integer.parseInt(list.get(0));
-			x2 = Integer.parseInt(list.get(1));
-			x3 = Double.parseDouble(list.get(2));
-			y1 = Integer.parseInt(list.get(3));
-			y2 = Integer.parseInt(list.get(4));
-			y3 = Double.parseDouble(list.get(5));
+			String latlong[] = conv.split("/");
+			String lat = latlong[0];
+			String lon = latlong[1];
+			String[] latlist = lat.split("\\*");
+			String[] lonlist = lon.split("\\*");
+			String[] latlist2 = latlist[1].split("\\'");
+			String[] lonlist2 = lonlist[1].split("\\'");
+			String latz = latlist2[1].replace('"', ' ');
+			latz = latz.strip();
+			String lonz = lonlist2[1].replace('"', ' ');
+			lonz = lonz.strip();
+			String[] lonlist3 = {lonlist[0], lonlist2[0], lonz};
+			String[] latlist3 = {latlist[0], latlist2[0], latz};
+			int x1, x2, y1, y2;
+			double x3, y3;
+			x1 = Integer.parseInt(latlist3[0]);
+			x2 = Integer.parseInt(lonlist3[1]);
+			y1 = Integer.parseInt(latlist3[0]);
+			y2 = Integer.parseInt(lonlist3[1]);
+			x3 = Double.parseDouble(latlist3[2]);
+			y3 = Double.parseDouble(lonlist3[2]);
 			coords = new CoordinatesWorld(new Latitude(x1, x2, x3), new Longitude(y1, y2, y3));
+			
 		}
-		else {throw new RuntimeException("Error! Invalid token!");}
 		return coords;
 	}
 	
+	public static CoordinatesWorld parseCoordinatesWorld(String list, boolean canBeReference, MyParserHelper parser) {
+		ArrayList<String> pass = new ArrayList<String>();
+		pass.add(list);
+		return parseCoordinatesWorld(pass, canBeReference, parser);
+	}
+	
+	public static CoordinatesDelta parseCoordinatesDelta(String list) {
+		ArrayList<String> pass = new ArrayList<String>();
+		pass.add(list);
+		return parseCoordinatesDelta(pass);
+	}
+	
 	public static CoordinatesDelta parseCoordinatesDelta(ArrayList<String> list) {
+		String[] doubles = new String[2];
+		String conv = "";
+		for(int i = 0; i < list.size(); ++i) {
+			conv+=list.get(i);
+		}
 		try {
-		list.remove(":");
+			doubles = conv.split(":");
 		} catch (Exception e) {
 			throw new RuntimeException("Error! Invalid token!");
 		}
-		double x = Double.parseDouble(list.get(0));
-		double y = Double.parseDouble(list.get(1));
-		return new CoordinatesDelta(0.0,0.0);
+		double x = Double.parseDouble(doubles[0]);
+		double y = Double.parseDouble(doubles[1]);
+		return new CoordinatesDelta(x, y);
 	}
 	
 	//Check for standard Java variable name, underscore included
