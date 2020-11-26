@@ -3,11 +3,13 @@ package cs350f20project.controller.cli.parser;
 
 import java.util.ArrayList;
 
+import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
+import cs350f20project.controller.command.structural.CommandStructuralLocate;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
 
 public class CommandParser {
@@ -67,7 +69,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("COUPLE"))
 				coupleOrUncoupleStock(tokens, true);
 			else if(token.equalsIgnoreCase("LOCATE"))
-				locateStock();
+				locateStock(tokens);
 			else if(token.equalsIgnoreCase("UNCOUPLE"))
 				coupleOrUncoupleStock(tokens, false);
 			else {
@@ -152,8 +154,34 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		this.parserHelper.getActionProcessor().schedule(command);
 	}
 	
-	public void locateStock() {
-		// 62 LOCATE STOCK id1 ON TRACK id2 DISTANCE number FROM ( START | END )
-		// check token.getNext() is "STOCK" otherwise invalid token
+	public void locateStock(Tokenizer tokens) {
+		// 62 LOCATE STOCK id1 ON TRACK id2 DISTANCE number FROM ( START | END ) => CommandStructuralLocate
+		String stockId = tokens.get(2);
+		if(!Checks.checkID(stockId, false)) {
+			tokens.invalidToken();
+		}
+		
+		String trackId = tokens.get(5);
+		if(!Checks.checkID(trackId, false)) {
+			tokens.invalidToken();
+		}
+		
+		String distanceString = tokens.get(7);
+		if(!Checks.checkStringIsDouble(distanceString)) {
+			tokens.invalidToken();
+		}
+		Double distance = Double.parseDouble(distanceString);
+		
+		boolean isFromStart = false;
+		String fromStartOrEnd = tokens.get(9);
+		if(!Checks.checkStringIsOneOfTheseValues(fromStartOrEnd, new String[] {"START", "END"})) {
+			tokens.invalidToken();
+		}
+		
+		if(fromStartOrEnd.equalsIgnoreCase("START")) {
+			isFromStart = true;
+		}
+		
+		this.parserHelper.getActionProcessor().schedule(new CommandStructuralLocate(stockId, new TrackLocator(trackId, distance, isFromStart)));
 	}
 }
