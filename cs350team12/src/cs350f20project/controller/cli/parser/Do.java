@@ -2,6 +2,7 @@ package cs350f20project.controller.cli.parser;
 
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.behavioral.CommandBehavioralBrake;
+import cs350f20project.controller.command.behavioral.CommandBehavioralSelectBridge;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSelectRoundhouse;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSelectSwitch;
 import cs350f20project.controller.command.behavioral.CommandBehavioralSetDirection;
@@ -36,7 +37,6 @@ public class Do extends ParserBase{
 		}
 		if(token.equalsIgnoreCase("SET")) {
 			return doSet();
-			
 		}
 		return checkArgs(token);
 	}
@@ -76,7 +76,6 @@ public class Do extends ParserBase{
 			return tokens.invalidToken();
 		}
 		return new CommandBehavioralBrake(token);
-		
 	}
 
 	// DO SELECT commands
@@ -84,7 +83,11 @@ public class Do extends ParserBase{
 	private A_Command selectDrawbridge() {
 		// 6  DO SELECT DRAWBRIDGE id POSITION ( UP | DOWN )
 		// When entering this method, tokens.getNext() should be id
-		return null;
+		if(tokens.size() > 6) return tokens.invalidToken();
+		String id = tokens.get(3);
+		if(!Checks.checkID(id, false)) return tokens.invalidToken();
+		if(!tokens.get(4).equalsIgnoreCase("POSITION")) return tokens.invalidToken();
+		return new CommandBehavioralSelectBridge(id, Checks.booleanFromString(tokens.get(5), "UP", "DOWN"));
 	}
 	
 	private A_Command selectRoundhouse() {
