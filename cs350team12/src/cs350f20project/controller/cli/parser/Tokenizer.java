@@ -35,6 +35,8 @@ public class Tokenizer {
 	}
 	
 	public String get(int index) {
+		if(index >= this.tokens.size())
+			throw new RuntimeException("Error! Invalid token!");
 		return tokens.get(index);
 	}
 	
