@@ -16,7 +16,7 @@ public class Checks {
 	//will check valid id and whether it starts with $ if the id is a reference
 	public static boolean checkID(String id, boolean reference) {
 		if(id == null)
-			return false;
+			throw new RuntimeException("Error! Invalid token!");
 		
 		String toCheck;
 		if(reference) {
