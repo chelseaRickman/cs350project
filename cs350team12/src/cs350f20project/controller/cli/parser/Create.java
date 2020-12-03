@@ -883,6 +883,73 @@ public class Create extends ParserBase{
 	
 	private A_Command trackSwitchWye() {
 		//49 CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number2
-		return null;
+
+		//id1
+		String wyeId = tokens.getNext();
+		if(!Checks.checkID(wyeId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( 'S' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//DISTANCE ORIGIN
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DISTANCEORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//number1
+		CoordinatesDelta deltaOrigin1 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, deltaStart1, deltaEnd1, Double.parseDouble(tokens.getNext()));
+		
+		//DELTA START
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta3
+		CoordinatesDelta deltaStart2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta4
+		CoordinatesDelta deltaEnd2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//DISTANCE ORIGIN
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DISTANCEORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//number2
+		CoordinatesDelta deltaOrigin2 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, deltaStart2, deltaEnd2, Double.parseDouble(tokens.getNext()));
+		
+		return new CommandCreateTrackSwitchWye(wyeId, coordinatesWorld, deltaStart1, deltaEnd1, deltaOrigin1, deltaStart2, deltaEnd2, deltaOrigin2);
 	}
 }
