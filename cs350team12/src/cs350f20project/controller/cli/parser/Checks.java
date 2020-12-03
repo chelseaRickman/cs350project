@@ -60,11 +60,25 @@ public class Checks {
 		}
 		
 		//Lat/Lon doubles should be length 3 x / y, Full writeouts should be length 12 x * y ' z ".
-		if(!reference.contains("/"))
-				throw new RuntimeException("Error! Invalid token!");
+//		if(!reference.contains("/"))
+//				throw new RuntimeException("Error! Invalid token!");
+		if(!reference.matches(".*/.*")) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
 		String latlong[] = reference.split("/");
+		
+		String latLonRegex = "[0-9]+\\*[0-9]+\\'[0-9]+\\.*[0-9]*\\\"";
+		
 		String lat = latlong[0];
+		if(!lat.matches(latLonRegex)) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
 		String lon = latlong[1];
+		if(!lon.matches(latLonRegex)) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
 		String[] latList = lat.split("\\*|\'|\"");
 		String[] lonList = lon.split("\\*|\'|\"");
 		
