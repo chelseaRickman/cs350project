@@ -65,34 +65,19 @@ public class Checks {
 		String latlong[] = reference.split("/");
 		String lat = latlong[0];
 		String lon = latlong[1];
-		String[] latlist = lat.split("\\*");
-		String[] lonlist = lon.split("\\*");
-		String[] latlist2 = latlist[1].split("\\'");
-		String[] lonlist2 = lonlist[1].split("\\'");
-		String latz = latlist2[1].replace('"', ' ');
-		latz = latz.strip();
-		String lonz = lonlist2[1].replace('"', ' ');
-		lonz = lonz.strip();
-		String[] lonlist3 = {lonlist[0], lonlist2[0], lonz};
-		String[] latlist3 = {latlist[0], latlist2[0], latz};
-		int x1, x2, y1, y2;
-		double x3, y3;
-		x1 = Integer.parseInt(latlist3[0]);
-		x2 = Integer.parseInt(lonlist3[1]);
-		y1 = Integer.parseInt(latlist3[0]);
-		y2 = Integer.parseInt(lonlist3[1]);
-		x3 = Double.parseDouble(latlist3[2]);
-		y3 = Double.parseDouble(lonlist3[2]);
+		String[] latList = lat.split("\\*|\'|\"");
+		String[] lonList = lon.split("\\*|\'|\"");
 		
-		return new CoordinatesWorld(new Latitude(x1, x2, x3), new Longitude(y1, y2, y3));
+		int latDegrees = Integer.parseInt(latList[0]);
+		int latMinutes = Integer.parseInt(latList[1]);
+		int latSeconds = Integer.parseInt(latList[2]);
+		
+		int lonDegrees = Integer.parseInt(lonList[0]);
+		int lonMinutes = Integer.parseInt(lonList[1]);
+		int lonSeconds = Integer.parseInt(lonList[2]);
+		
+		return new CoordinatesWorld(new Latitude(latDegrees, latMinutes, latSeconds), new Longitude(lonDegrees, lonMinutes, lonSeconds));
 	}
-
-	//don't think this is needed anymore
-//	public static CoordinatesWorld parseCoordinatesWorld(String list, boolean canBeReference, MyParserHelper parser) {
-//		ArrayList<String> pass = new ArrayList<String>();
-//		pass.add(list);
-//		return parseCoordinatesWorld(pass, canBeReference, parser);
-//	}
 	
 	public static CoordinatesDelta parseCoordinatesDelta(String list) {
 		ArrayList<String> pass = new ArrayList<String>();
