@@ -122,13 +122,22 @@ public class Create extends ParserBase{
 	private A_Command powerCatenary() {
 		// 22 CREATE POWER CATENARY id1 WITH POLES idn+
 		// When entering this method tokens.getNext() should be id1
-		String id = tokens.get(3);
+	
+		//id1
+		String id = tokens.getNext();
 		if(!Checks.checkID(id, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//WITH POLES
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("WITHPOLES")) {
 			return tokens.invalidToken();
 		}
 		
 		List<String> poleIds = new ArrayList<String>();
 
+		//idn+
 		String currentPoleId;
 		for(int i = 6; i < tokens.size(); i++) {
 			currentPoleId = tokens.get(i);
