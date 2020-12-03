@@ -588,7 +588,57 @@ public class Create extends ParserBase{
 	private A_Command trackCurve() {
 		// 43 CREATE TRACK CURVE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 ( ( DISTANCE ORIGIN number ) | ( ORIGIN coordinates_delta3 ) )
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+
+		//id1
+		String curveId = tokens.getNext();
+		if(!Checks.checkID(curveId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//( ( DISTANCE ORIGIN number ) | (ORIGIN coordinates_delta3 ) )
+		String currentToken = tokens.getNext();
+		if(!Checks.checkStringIsOneOfTheseValues(currentToken, new String[] {"DISTANCE", "ORIGIN"})) {
+			return tokens.invalidToken();
+		}
+		
+		if(currentToken.equalsIgnoreCase("DISTANCE")) {
+			if(!tokens.getNext().equalsIgnoreCase("ORIGIN")) {
+				return tokens.invalidToken();
+			}
+			double number = Double.parseDouble(tokens.getNext());
+			
+			return new CommandCreateTrackCurve(curveId, coordinatesWorld, deltaStart, deltaEnd, number);
+			
+		}
+		
+		CoordinatesDelta deltaOrigin = Checks.parseCoordinatesDelta(tokens.getNext());
+
+		return new CommandCreateTrackCurve(curveId, coordinatesWorld, deltaStart, deltaEnd, deltaOrigin);
 	}
 	
 	private A_Command trackEnd() {
