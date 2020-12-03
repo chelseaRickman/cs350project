@@ -205,31 +205,36 @@ public class Create extends ParserBase{
 	private A_Command powerStation() {
 		// 24 CREATE POWER STATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH ( SUBSTATION | SUBSTATIONS )idn+
 		// When entering this method tokens.getNext() should be id1
-		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
-		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
+		
+		//id1
 		String id1 = tokens.getNext();
-		Checks.checkID(id1, true);
+		if(!Checks.checkID(id1, false))
+			return tokens.invalidToken();
 
-		String token = tokens.getNext();
-		ArrayList<String> world = new ArrayList<String>();
-		while(!token.equalsIgnoreCase("DELTA")) {
-			verifyArg(token);
-			world.add(token);
-			token = tokens.getNext();
-		}
-		//coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
-		ArrayList<String> delts = new ArrayList<String>();
-		//progress to another argumentlist for the delta
-		while(!token.equalsIgnoreCase("WITH")){
-			verifyArg(token);
-			delts.add(token);
-			token = tokens.getNext();
-		}
-		deltas = Checks.parseCoordinatesDelta(delts);
-		token = tokens.getNext();
-		boolean suborsubs = Checks.booleanFromString(token, "SUBSTATION", "SUBSTATIONS");
-		token = tokens.getNext();
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE"))
+			return tokens.invalidToken();
+		
+		//( coordinates_world | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA
+		if(!tokens.getNext().equalsIgnoreCase("DELTA"))
+			return tokens.invalidToken();
+		
+		//coordinates_delta
+		CoordinatesDelta coordinatesDelta = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//WITH
+		if(!tokens.getNext().equalsIgnoreCase("WITH"))
+			return tokens.invalidToken();
+		
+		//( SUBSTATION | SUBSTATIONS )
+		boolean suborsubs = Checks.booleanFromString(tokens.getNext(), "SUBSTATION", "SUBSTATIONS");
+		
+		//idn+
 		ArrayList<String> ids = new ArrayList<String>();
+		String token = tokens.getNext();
 		while(token != null) {
 			if(Checks.checkID(token, false)) {
 				ids.add(token);
@@ -240,7 +245,8 @@ public class Create extends ParserBase{
 			return tokens.invalidToken();
 		if(ids.size() > 1 && suborsubs == true)
 			return tokens.invalidToken();
-		return new CommandCreatePowerStation(id1, coords, deltas, ids);
+		
+		return new CommandCreatePowerStation(id1, coordinatesWorld, coordinatesDelta, ids);
 	}
 	
 	private A_Command powerSubstation() {
