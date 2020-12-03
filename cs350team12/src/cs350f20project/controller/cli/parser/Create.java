@@ -145,24 +145,42 @@ public class Create extends ParserBase{
 	private A_Command powerPole() {
 		// 23 CREATE POWER POLE id1 ON TRACK id2 DISTANCE number FROM ( START | END )
 		// When entering this method tokens.getNext() should be id1
-		String poleId = tokens.get(3);
+		String poleId = tokens.getNext(); //id1
 		if(!Checks.checkID(poleId, false)) {
 			return tokens.invalidToken();
 		}
 		
-		String trackId = tokens.get(6);
+		//ON TRACK
+		String keywords = tokens.getNext() + tokens.getNext(); 
+		if(!keywords.equalsIgnoreCase("ONTRACK")) {
+			return tokens.invalidToken();
+		}
+		
+		String trackId = tokens.getNext(); //id2
 		if(!Checks.checkID(trackId, false)) {
 			return tokens.invalidToken();
 		}
 		
-		String distanceFromString = tokens.get(8);
+		//DISTANCE
+		if(!tokens.getNext().equalsIgnoreCase("DISTANCE")) { 
+			return tokens.invalidToken();
+		}
+		
+		//number
+		String distanceFromString = tokens.getNext(); 
 		if(!Checks.checkStringIsDouble(distanceFromString)) {
 			return tokens.invalidToken();
 		}
 		Double distanceFrom = Double.parseDouble(distanceFromString);
 		
+		//FROM
+		if(!tokens.getNext().equalsIgnoreCase("FROM")) { 
+			return tokens.invalidToken();
+		}
+		
+		//(START | END)
 		boolean isFromStart = false;
-		String startOrEnd = tokens.get(10);
+		String startOrEnd = tokens.getNext(); 
 		if(!Checks.checkStringIsOneOfTheseValues(startOrEnd, new String[] {"START", "END"})){
 			return tokens.invalidToken();
 		}
