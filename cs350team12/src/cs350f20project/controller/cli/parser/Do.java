@@ -120,17 +120,21 @@ public class Do extends ParserBase{
 	private A_Command selectSwitch() {
 		// 8  DO SELECT SWITCH id PATH ( PRIMARY | SECONDARY )
 		// When entering this method, tokens.getNext() should be id
-		String id = tokens.getNext(); //id
+		
+		//id
+		String id = tokens.getNext(); 
 		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		
-		if(!tokens.getNext().equalsIgnoreCase("PATH")) { //PATH
+		//PATH
+		if(!tokens.getNext().equalsIgnoreCase("PATH")) { 
 			return tokens.invalidToken();
 		}
 		
+		// (PRIMARY | SECONDARY)
 		boolean isPrimary = false;
-		String primaryOrSecondary = tokens.getNext(); // (PRIMARY | SECONDARY)
+		String primaryOrSecondary = tokens.getNext(); 
 		if(!Checks.checkStringIsOneOfTheseValues(primaryOrSecondary, new String[] {"PRIMARY", "SECONDARY"})) {
 			return tokens.invalidToken();
 		}
@@ -162,7 +166,8 @@ public class Do extends ParserBase{
 			return tokens.invalidToken();
 		}
 		
-		String directionOrSpeed = tokens.get(3);
+		//DIRECTION or SPEED
+		String directionOrSpeed = tokens.getNext();
 		if(!Checks.checkStringIsOneOfTheseValues(directionOrSpeed, new String[] {"DIRECTION", "SPEED"})) {
 			return tokens.invalidToken();
 		}
@@ -179,8 +184,10 @@ public class Do extends ParserBase{
 	
 	private A_Command setIdDirection(String id) {
 		// 11 DO SET id DIRECTION ( FORWARD | BACKWARD )
+		
+		//(FORWARD | BACKWARD)
 		boolean isForward = false;
-		String direction = tokens.get(4);
+		String direction = tokens.getNext();
 		if(!Checks.checkStringIsOneOfTheseValues(direction, new String[] {"FORWARD", "BACKWARD"}))
 			return tokens.invalidToken();
 		
@@ -193,7 +200,9 @@ public class Do extends ParserBase{
 	
 	private A_Command setIdSpeed(String id) {
 		// 15 DO SET id SPEED number
-		String number = tokens.get(4);
+		
+		//number
+		String number = tokens.getNext();
 		if(!Checks.checkStringIsDouble(number)) {
 			return tokens.invalidToken();
 		}
