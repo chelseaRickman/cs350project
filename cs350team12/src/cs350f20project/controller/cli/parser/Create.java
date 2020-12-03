@@ -498,7 +498,55 @@ public class Create extends ParserBase{
 	private A_Command trackCrossover() {
 		// 42 CREATE TRACK CROSSOVER id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 START coordinates_delta3 END coordinates_delta4
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		
+		//id1
+		String crossoverId = tokens.getNext();
+		if(!Checks.checkID(crossoverId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//START
+		if(!tokens.getNext().equalsIgnoreCase("START")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta3
+		CoordinatesDelta deltaStart2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta4
+		CoordinatesDelta deltaEnd2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		return new CommandCreateTrackCrossover(crossoverId, coordinatesWorld, deltaStart1, deltaEnd1, deltaStart2, deltaEnd2);
 	}
 	
 	private A_Command trackCurve() {
