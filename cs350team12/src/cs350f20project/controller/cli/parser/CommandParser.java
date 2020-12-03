@@ -136,12 +136,21 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		// Implements one of the two commands depending on the passed in boolean value: true is COUPLE, false is UNCOUPLE
 		// 61 COUPLE STOCK id1 AND id2
 		// 65 UNCOUPLE STOCK id1 AND id2
-		String stockId1 = tokens.get(2);
+		
+		if(!tokens.getNext().equalsIgnoreCase("STOCK")) { //STOCK
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
+		String stockId1 = tokens.getNext(); //id1
 		if(!Checks.checkID(stockId1, false)) {
 			tokens.invalidToken();
 		}
 		
-		String stockId2 = tokens.get(4);
+		if(!tokens.getNext().equalsIgnoreCase("AND")) { //AND
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
+		String stockId2 = tokens.getNext(); //id2
 		if(!Checks.checkID(stockId2, false)) {
 			tokens.invalidToken();
 		}
