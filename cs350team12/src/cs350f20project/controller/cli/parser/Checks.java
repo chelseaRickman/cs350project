@@ -50,7 +50,10 @@ public class Checks {
 	
 	// If the reference passed in is an id, uses MyParserHelper to get the CoordinatesWorld object.
 	// Otherwise parses reference (latitude/longitude) to build the CoordinatesWorld object
-	public static CoordinatesWorld parseCoordinatesWorld(String reference, MyParserHelper parser) {		
+	public static CoordinatesWorld parseCoordinatesWorld(String reference, MyParserHelper parser) {	
+		if(reference == null || parser == null)
+			throw new RuntimeException("Error! Invalid token!");
+		
 		// Is a reference id, example: $id
 		if(reference.startsWith("$")) {
 			return parser.getReference(reference);
