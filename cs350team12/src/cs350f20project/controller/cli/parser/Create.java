@@ -644,7 +644,39 @@ public class Create extends ParserBase{
 	private A_Command trackEnd() {
 		// 44 CREATE TRACK END id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		
+		//id1
+		String endId = tokens.getNext();
+		if(!Checks.checkID(endId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_word | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+
+		return new CommandCreateTrackEnd(endId, new PointLocator(coordinatesWorld, deltaStart, deltaEnd));
 	}
 	
 	private A_Command trackLayout() {
