@@ -120,6 +120,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	
 	public void commit() {
 		//60 COMMIT
+		this.parserHelper.getActionProcessor().schedule(new CommandStructuralCommit());
 	}
 	
 	public void use(Tokenizer tokens) {
