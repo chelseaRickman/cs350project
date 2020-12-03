@@ -60,45 +60,46 @@ public class Checks {
 		}
 		
 		//Lat/Lon doubles should be length 3 x / y, Full writeouts should be length 12 x * y ' z ".
-		if(!reference.contains("/"))
-				throw new RuntimeException("Error! Invalid token!");
+//		if(!reference.contains("/"))
+//				throw new RuntimeException("Error! Invalid token!");
+		if(!reference.matches(".*/.*")) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
 		String latlong[] = reference.split("/");
+		
+		String latLonRegex = "[0-9]+\\*[0-9]+\\'[0-9]+\\.*[0-9]*\\\"";
+		
 		String lat = latlong[0];
+		if(!lat.matches(latLonRegex)) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
 		String lon = latlong[1];
+		if(!lon.matches(latLonRegex)) {
+			throw new RuntimeException("Error! Invalid token!");
+		}
+		
 		String[] latList = lat.split("\\*|\'|\"");
 		String[] lonList = lon.split("\\*|\'|\"");
 		
 		int latDegrees = Integer.parseInt(latList[0]);
 		int latMinutes = Integer.parseInt(latList[1]);
-		int latSeconds = Integer.parseInt(latList[2]);
+		double latSeconds = Double.parseDouble(latList[2]);
 		
 		int lonDegrees = Integer.parseInt(lonList[0]);
 		int lonMinutes = Integer.parseInt(lonList[1]);
-		int lonSeconds = Integer.parseInt(lonList[2]);
+		double lonSeconds = Double.parseDouble(lonList[2]);
 		
 		return new CoordinatesWorld(new Latitude(latDegrees, latMinutes, latSeconds), new Longitude(lonDegrees, lonMinutes, lonSeconds));
 	}
 	
-	public static CoordinatesDelta parseCoordinatesDelta(String list) {
-		ArrayList<String> pass = new ArrayList<String>();
-		pass.add(list);
-		return parseCoordinatesDelta(pass);
-	}
-	
-	public static CoordinatesDelta parseCoordinatesDelta(ArrayList<String> list) {
-		String[] doubles = new String[2];
-		String conv = "";
-		for(int i = 0; i < list.size(); ++i) {
-			conv+=list.get(i);
-		}
-		try {
-			doubles = conv.split(":");
-		} catch (Exception e) {
+	public static CoordinatesDelta parseCoordinatesDelta(String token) {
+		if(!token.matches(".*:.*")) {
 			throw new RuntimeException("Error! Invalid token!");
 		}
-		double x = Double.parseDouble(doubles[0]);
-		double y = Double.parseDouble(doubles[1]);
-		return new CoordinatesDelta(x, y);
+		String [] doubles = token.split(":");
+		
+		return new CoordinatesDelta(Double.parseDouble(doubles[0]), Double.parseDouble(doubles[1]));
 	}
 	
 	// Checks whether the provided String can be parsed to a double value

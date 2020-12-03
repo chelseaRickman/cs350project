@@ -798,22 +798,158 @@ public class Create extends ParserBase{
 		 * Can create helper methods for TRACK SWITCH TURNOUT and TRACK SWITCH WYE
 		 * When entering this method, tokens.getNext() should be either "TURNOUT" or "WYE", then call the corresponding helper method
 		 * 48 CREATE TRACK SWITCH TURNOUT id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) STRAIGHT DELTA START coordinates_delta1 END coordinates_delta2 CURVE DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number
-		 * 	return trackSwitchTurnout();
 		 * 49 CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number2
-		 	return trackSwitchTurnout();
 		 */
-		return null;
+		
+		//TURNOUT or WYE
+		String currentToken = tokens.getNext();
+		if(!Checks.checkStringIsOneOfTheseValues(currentToken, new String[] {"TURNOUT", "WYE"})) {
+			return tokens.invalidToken();
+		}
+		
+		//TURNOUT
+		if(currentToken.equalsIgnoreCase("TURNOUT")) {
+			return trackSwitchTurnout();
+		}
+		
+		//WYE
+		return trackSwitchWye();
+		
 	}
 	
 	// trackSwitch helper methods
 	
 	private A_Command trackSwitchTurnout() {
 		//48 CREATE TRACK SWITCH TURNOUT id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) STRAIGHT DELTA START coordinates_delta1 END coordinates_delta2 CURVE DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number
-		return null;
+		
+		//id1
+		String turnoutId = tokens.getNext();
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( '$' id2 ) ) 
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//STRAIGHT DELTA START
+		String keywords = tokens.getNext() + tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("STRAIGHTDELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta straightDeltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta straightDeltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//CURVE DELTA START
+		keywords = tokens.getNext() + tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("CURVEDELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta3
+		CoordinatesDelta curveDeltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta4
+		CoordinatesDelta curveDeltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//DISTANCE ORIGIN
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DISTANCEORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//number
+		Double distance = Double.parseDouble(tokens.getNext());
+		
+		CoordinatesDelta curveDeltaOrigin = ShapeArc.calculateDeltaOrigin(coordinatesWorld, curveDeltaStart, curveDeltaEnd, distance);
+		
+		return new CommandCreateTrackSwitchTurnout(turnoutId, coordinatesWorld, straightDeltaStart, straightDeltaEnd, curveDeltaStart, curveDeltaEnd, curveDeltaOrigin);
 	}
 	
 	private A_Command trackSwitchWye() {
 		//49 CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number2
-		return null;
+
+		//id1
+		String wyeId = tokens.getNext();
+		if(!Checks.checkID(wyeId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( 'S' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd1 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//DISTANCE ORIGIN
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DISTANCEORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//number1
+		CoordinatesDelta deltaOrigin1 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, deltaStart1, deltaEnd1, Double.parseDouble(tokens.getNext()));
+		
+		//DELTA START
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta3
+		CoordinatesDelta deltaStart2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta4
+		CoordinatesDelta deltaEnd2 = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//DISTANCE ORIGIN
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DISTANCEORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//number2
+		CoordinatesDelta deltaOrigin2 = ShapeArc.calculateDeltaOrigin(coordinatesWorld, deltaStart2, deltaEnd2, Double.parseDouble(tokens.getNext()));
+		
+		return new CommandCreateTrackSwitchWye(wyeId, coordinatesWorld, deltaStart1, deltaEnd1, deltaOrigin1, deltaStart2, deltaEnd2, deltaOrigin2);
 	}
 }
