@@ -31,7 +31,11 @@ public class Checks {
 			toCheck = id;
 		}
 		
-		return isStringStandardJavVar(toCheck);
+		if(isStringStandardJavVar(toCheck) && !checkKeyword(toCheck)) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public static boolean expectedString(String check, String expect) {

@@ -11,6 +11,7 @@ import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralLocate;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
+import cs350f20project.datatype.CoordinatesWorld;
 
 public class CommandParser {
 	
@@ -61,7 +62,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("COMMIT"))
 				commit();
 			else if(token.equalsIgnoreCase("USE"))
-				use();
+				use(tokens);
 			else if(token.equalsIgnoreCase("CLOSE"))
 				closeView(tokens);
 			else if(token.equalsIgnoreCase("OPEN"))
@@ -108,9 +109,26 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		//60 COMMIT
 	}
 	
-	public void use() {
+	public void use(Tokenizer tokens) {
 		//66 USE id AS REFERENCE coordinates_world
 		//when entering this method tokens.getNext() should be the id
+		
+		//id
+		String id = tokens.getNext();
+		if(!Checks.checkID(id, false)) {
+			tokens.invalidToken();
+		}
+		
+		//AS REFERENCE
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("ASREFERENCE")) {
+			tokens.invalidToken();
+		}
+		
+		//coordinates_world
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		this.parserHelper.addReference("$" + id, coordinatesWorld);	
 	}
 	
 	public void closeView(Tokenizer tokens) {
