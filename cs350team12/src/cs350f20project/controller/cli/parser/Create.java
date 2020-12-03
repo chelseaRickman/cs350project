@@ -484,19 +484,23 @@ public class Create extends ParserBase{
 	private A_Command trackLayout() {
 		// 45 CREATE TRACK LAYOUT id1 WITH TRACKS idn+ => CommandCreateTrackLayout
 		// When entering this method, tokens.getNext() should be id1
-		String trackLayoutId = tokens.getNext(); //id1
+		
+		//id1
+		String trackLayoutId = tokens.getNext(); 
 		if(!Checks.checkID(trackLayoutId, false)) {
 			return tokens.invalidToken();
 		}
 		
-		if(!(tokens.getNext() + tokens.getNext()).equalsIgnoreCase("WITHTRACKS")) { //WITH TRACKS
+		//WITH TRACKS
+		if(!(tokens.getNext() + tokens.getNext()).equalsIgnoreCase("WITHTRACKS")) { 
 			return tokens.invalidToken();
 		}
 		
 		List<String> trackIds = new ArrayList<String>();
 		
+		//idn+
 		String currentTrackId;
-		for(int i = 6; i < tokens.size(); i++) { //idn+
+		for(int i = 6; i < tokens.size(); i++) { 
 			currentTrackId = tokens.get(i);
 			
 			if(!Checks.checkID(currentTrackId, false))
