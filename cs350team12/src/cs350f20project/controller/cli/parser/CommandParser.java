@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
+import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
@@ -59,7 +60,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 				else if(token.equalsIgnoreCase("@EXIT"))
 					exit();
 				else if(token.equalsIgnoreCase("@RUN"))
-					run();
+					run(tokens);
 				else if(token.equalsIgnoreCase("COMMIT"))
 					commit();
 				else if(token.equalsIgnoreCase("USE"))
@@ -106,9 +107,15 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		this.parserHelper.getActionProcessor().schedule(command);
 	}
 	
-	public void run() {
+	public void run(Tokenizer tokens) {
 		//52 @RUN string
-		
+		String directory = tokens.getNext();
+		for(int i = 3; i <= tokens.size(); i++) {
+			directory += " " + tokens.getNext();
+		}
+		System.out.println(directory);
+		A_Command command = new CommandMetaDoRun(directory);
+		this.parserHelper.getActionProcessor().schedule(command);
 	}
 	
 	public void commit() {
