@@ -115,10 +115,13 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	
 	public void closeView(Tokenizer tokens) {
 		// 55 CLOSE VIEW id
-		if(!tokens.getNext().equalsIgnoreCase("VIEW")) //VIEW
+		
+		//VIEW
+		if(!tokens.getNext().equalsIgnoreCase("VIEW")) 
 			throw new RuntimeException("Error! Invalid token!");
 		
-		String id = tokens.getNext(); //id
+		//id
+		String id = tokens.getNext(); 
 		if(!Checks.checkID(id, false)) {
 			tokens.invalidToken();
 		}
@@ -137,20 +140,24 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		// 61 COUPLE STOCK id1 AND id2
 		// 65 UNCOUPLE STOCK id1 AND id2
 		
-		if(!tokens.getNext().equalsIgnoreCase("STOCK")) { //STOCK
+		//STOCK
+		if(!tokens.getNext().equalsIgnoreCase("STOCK")) { 
 			throw new RuntimeException("Error! Invalid token!");
 		}
 		
-		String stockId1 = tokens.getNext(); //id1
+		//id1
+		String stockId1 = tokens.getNext();
 		if(!Checks.checkID(stockId1, false)) {
 			tokens.invalidToken();
 		}
 		
-		if(!tokens.getNext().equalsIgnoreCase("AND")) { //AND
+		//AND
+		if(!tokens.getNext().equalsIgnoreCase("AND")) { 
 			throw new RuntimeException("Error! Invalid token!");
 		}
 		
-		String stockId2 = tokens.getNext(); //id2
+		//id2
+		String stockId2 = tokens.getNext(); 
 		if(!Checks.checkID(stockId2, false)) {
 			tokens.invalidToken();
 		}
