@@ -71,12 +71,12 @@ public class Tester {
 		testarr.add("'");
 		testarr.add("1.0");
 		testarr.add("\"");
-		String teststring = "46*40'58\"/117*19'21\"";
+		
 		CoordinatesWorld delt = Checks.parseCoordinatesWorld(teststring, false, parserHelper);
 		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
-
-		String commandText = "CREATE STOCK CAR id AS TANK;CREATE STOCK CAR id AS BOX";
+		String teststring = "46*40'58\"/117*19'21\"";
+		String commandText = "CREATE TRACK BRIDGE DRAW id1 REFERENCE "+ teststring + " DELTA START 12:18 END 12:20 ANGLE 0";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 

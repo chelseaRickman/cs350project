@@ -454,7 +454,43 @@ public class Create extends ParserBase{
 	// trackBridge helper method
 	private A_Command trackBridgeDraw() {
 		//39 CREATE TRACK BRIDGE DRAW id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 ANGLE angle
-		return null;
+		String nextToken = tokens.getNext();
+		String bridgeId = nextToken;
+		if(!Checks.checkID(bridgeId, false)) {
+			return tokens.invalidToken();
+		}
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		//(coordinates_world | ('$' id2)
+		String reference = tokens.getNext();
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(reference, tokens.getParser());
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		String next = tokens.getNext();
+		System.out.println(next);
+		if(!next.equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		next = tokens.getNext();
+		if(!next.equalsIgnoreCase("ANGLE")) {
+			return tokens.invalidToken();
+		}
+		double angle;
+		next=tokens.getNext();
+		try {
+		angle = Double.parseDouble(next);
+		} catch(Exception e) {
+			return tokens.invalidToken();
+		}
+		return new CommandCreateTrackBridgeDraw(bridgeId, new PointLocator(coordinatesWorld, deltaStart, deltaEnd), new Angle(angle));
 	}
 	
 	private A_Command trackCrossing() {
