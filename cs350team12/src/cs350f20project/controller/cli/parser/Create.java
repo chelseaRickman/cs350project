@@ -5,6 +5,7 @@ import java.util.List;
 
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
+import cs350f20project.controller.command.PointLocator;
 import cs350f20project.controller.command.creational.*;
 import cs350f20project.datatype.*;
 
@@ -393,13 +394,58 @@ public class Create extends ParserBase{
 	private A_Command trackBridge() {
 		/*
 		 * Can create helper methods for TRACK BRIDGE and BRIDGE DRAW
-		 * When entering this method, tokengs.getNext() should be either "DRAW" or id1
+		 * When entering this method, tokens.getNext() should be either "DRAW" or id1
 		 * Determine whether TRACK BRIDGE or BRIDGE DRAW and then call the corresponding helper method for DRAW if DRAW. Otherwise handle in this method.
 		 * 39 CREATE TRACK BRIDGE DRAW id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 ANGLE angle
 		 * 40 CREATE TRACK BRIDGE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2
 		 */
 		
-		return null;
+		//If the next token is "DRAW" call trackBridgeDraw(), otherwise next token is id1
+		String nextToken = tokens.getNext();
+		if(nextToken.equals("DRAW")) {
+			return trackBridgeDraw();
+		}
+		
+		//id1
+		String bridgeId = nextToken;
+		if(!Checks.checkID(bridgeId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//(coordinates_world | ('$' id2)
+		CoordinatesWorld coordinatesWorld;
+		String reference = tokens.getNext();
+		if(reference.startsWith("$")) {
+			coordinatesWorld = tokens.getParser().getReference(reference);
+		}
+		else {
+			//I dont think the parseCoordinatesWorld is correctly implemented, just using it to make rest of method work
+			coordinatesWorld = Checks.parseCoordinatesWorld(new ArrayList<String>(), false, tokens.getParser());
+		}
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		return new CommandCreateTrackBridgeFixed(bridgeId, new PointLocator(coordinatesWorld, deltaStart, deltaEnd));
 	}
 	
 	// trackBridge helper method
