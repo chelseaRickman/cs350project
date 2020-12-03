@@ -115,6 +115,9 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		
 		//id
 		String id = tokens.getNext();
+		if(!Checks.checkID(id, false)) {
+			tokens.invalidToken();
+		}
 		
 		//AS REFERENCE
 		String keywords = tokens.getNext() + tokens.getNext();
@@ -125,7 +128,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		//coordinates_world
 		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
 		
-		this.parserHelper.addReference(id, coordinatesWorld);	
+		this.parserHelper.addReference("$" + id, coordinatesWorld);	
 	}
 	
 	public void closeView(Tokenizer tokens) {
