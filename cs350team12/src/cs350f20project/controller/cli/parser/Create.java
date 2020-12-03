@@ -217,7 +217,7 @@ public class Create extends ParserBase{
 			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
+		//coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
 		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
 		while(!token.equalsIgnoreCase("WITH")){
@@ -257,7 +257,7 @@ public class Create extends ParserBase{
 			world.add(token);
 			token = tokens.getNext();
 		}
-		coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
+		//coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
 		ArrayList<String> delts = new ArrayList<String>();
 		//progress to another argumentlist for the delta
 		while(!token.equalsIgnoreCase("WITH")){
@@ -418,15 +418,8 @@ public class Create extends ParserBase{
 		}
 		
 		//(coordinates_world | ('$' id2)
-		CoordinatesWorld coordinatesWorld;
 		String reference = tokens.getNext();
-		if(reference.startsWith("$")) {
-			coordinatesWorld = tokens.getParser().getReference(reference);
-		}
-		else {
-			//I dont think the parseCoordinatesWorld is correctly implemented, just using it to make rest of method work
-			coordinatesWorld = Checks.parseCoordinatesWorld(new ArrayList<String>(), false, tokens.getParser());
-		}
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(reference, tokens.getParser());
 		
 		//DELTA START
 		String keywords = tokens.getNext() + tokens.getNext();
