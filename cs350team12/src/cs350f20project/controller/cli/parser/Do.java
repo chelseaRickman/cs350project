@@ -139,7 +139,6 @@ public class Do extends ParserBase{
 			isPrimary = true;
 		}
 		
-		System.out.println(id + primaryOrSecondary + isPrimary);
 		return new CommandBehavioralSelectSwitch(id, isPrimary);
 	}
 	
