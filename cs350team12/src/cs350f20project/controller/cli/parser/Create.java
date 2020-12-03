@@ -108,7 +108,7 @@ public class Create extends ParserBase{
 			return trackEnd();
 		if(nextToken.equalsIgnoreCase("LAYOUT"))
 			return trackLayout();
-		if(nextToken.equalsIgnoreCase("ROUNDHOUSE"))
+		if(nextToken.equalsIgnoreCase("ROUNDHOUSE")) 
 			return trackRoundhouse();
 		if(nextToken.equalsIgnoreCase("STRAIGHT"))
 			return trackStraight();
@@ -644,7 +644,39 @@ public class Create extends ParserBase{
 	private A_Command trackEnd() {
 		// 44 CREATE TRACK END id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		
+		//id1
+		String endId = tokens.getNext();
+		if(!Checks.checkID(endId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_word | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+
+		return new CommandCreateTrackEnd(endId, new PointLocator(coordinatesWorld, deltaStart, deltaEnd));
 	}
 	
 	private A_Command trackLayout() {
@@ -680,7 +712,79 @@ public class Create extends ParserBase{
 	private A_Command trackRoundhouse() {
 		// 46 CREATE TRACK ROUNDHOUSE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA ORIGIN coordinates_delta1 ANGLE ENTRY angle1 START angle2 END angle3 WITH integer SPURS LENGTH number1 TURNTABLE LENGTH number2
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		
+		//id1
+		String roundhouseId = tokens.getNext();
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( '$' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA ORIGIN
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTAORIGIN")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaOrigin = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//ANGLE ENTRY
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("ANGLEENTRY")) {
+			return tokens.invalidToken();
+		}
+		
+		//angle1
+		Angle entryAngle = new Angle(Double.parseDouble(tokens.getNext()));
+		
+		//START
+		if(!tokens.getNext().equalsIgnoreCase("START")) {
+			return tokens.invalidToken();
+		}
+		
+		//angle2
+		Angle startAngle = new Angle(Double.parseDouble(tokens.getNext()));
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//angle3
+		Angle endAngle = new Angle(Double.parseDouble(tokens.getNext()));
+		
+		//WITH
+		if(!tokens.getNext().equalsIgnoreCase("WITH")) {
+			return tokens.invalidToken();
+		}
+		
+		//integer
+		int numberSpurs = Integer.parseInt(tokens.getNext());
+		
+		//SPURS LENGTH
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("SPURSLENGTH")) {
+			return tokens.invalidToken();
+		}
+		
+		//number1
+		Double spurLength = Double.parseDouble(tokens.getNext());
+		
+		//TURNTABLE LENGTH
+		keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("TURNTABLELENGTH")) {
+			return tokens.invalidToken();
+		}
+		
+		//number2
+		Double turntableLength = Double.parseDouble(tokens.getNext());
+
+		return new CommandCreateTrackRoundhouse(roundhouseId, coordinatesWorld, deltaOrigin, entryAngle, startAngle, endAngle, numberSpurs, spurLength, turntableLength);
 	}
 	
 	private A_Command trackStraight() {
