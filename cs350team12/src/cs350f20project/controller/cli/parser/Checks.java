@@ -93,26 +93,13 @@ public class Checks {
 		return new CoordinatesWorld(new Latitude(latDegrees, latMinutes, latSeconds), new Longitude(lonDegrees, lonMinutes, lonSeconds));
 	}
 	
-	public static CoordinatesDelta parseCoordinatesDelta(String list) {
-		ArrayList<String> pass = new ArrayList<String>();
-		pass.add(list);
-		return parseCoordinatesDelta(pass);
-	}
-	
-	public static CoordinatesDelta parseCoordinatesDelta(ArrayList<String> list) {
-		String[] doubles = new String[2];
-		String conv = "";
-		for(int i = 0; i < list.size(); ++i) {
-			conv+=list.get(i);
-		}
-		try {
-			doubles = conv.split(":");
-		} catch (Exception e) {
+	public static CoordinatesDelta parseCoordinatesDelta(String token) {
+		if(!token.matches(".*:.*")) {
 			throw new RuntimeException("Error! Invalid token!");
 		}
-		double x = Double.parseDouble(doubles[0]);
-		double y = Double.parseDouble(doubles[1]);
-		return new CoordinatesDelta(x, y);
+		String [] doubles = token.split(":");
+		
+		return new CoordinatesDelta(Double.parseDouble(doubles[0]), Double.parseDouble(doubles[1]));
 	}
 	
 	// Checks whether the provided String can be parsed to a double value
