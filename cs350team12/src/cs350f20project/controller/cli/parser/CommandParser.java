@@ -115,7 +115,10 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	
 	public void closeView(Tokenizer tokens) {
 		// 55 CLOSE VIEW id
-		String id = tokens.get(2);
+		if(!tokens.getNext().equalsIgnoreCase("VIEW")) //VIEW
+			throw new RuntimeException("Error! Invalid token!");
+		
+		String id = tokens.getNext(); //id
 		if(!Checks.checkID(id, false)) {
 			tokens.invalidToken();
 		}
