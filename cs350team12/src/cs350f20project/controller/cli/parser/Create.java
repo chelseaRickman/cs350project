@@ -252,31 +252,34 @@ public class Create extends ParserBase{
 	private A_Command powerSubstation() {
 		// 25 CREATE POWER SUBSTATION id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA coordinates_delta WITH CATENARIES idn+
 		// When entering this method tokens.getNext() should be id1
-		CoordinatesWorld coords = new CoordinatesWorld(new Latitude(0.0), new Longitude(0.0));
-		CoordinatesDelta deltas = new CoordinatesDelta(0.0, 0.0);
+		
+		//id1
 		String id1 = tokens.getNext();
-		Checks.checkID(id1, true);
-		ArrayList<String> world = new ArrayList<String>();
-		String token = tokens.getNext();
-		while(!token.equalsIgnoreCase("DELTA")) {
-			verifyArg(token);
-			world.add(token);
-			token = tokens.getNext();
-		}
-		//coords = Checks.parseCoordinatesWorld(world, true, tokens.getParser());
-		ArrayList<String> delts = new ArrayList<String>();
-		//progress to another argumentlist for the delta
-		while(!token.equalsIgnoreCase("WITH")){
-			verifyArg(token);
-			delts.add(token);
-			token = tokens.getNext();
-		}
-		deltas = Checks.parseCoordinatesDelta(delts);
-		token = tokens.getNext();
-		if(token.equalsIgnoreCase("CATENARIES"))
+		if(!Checks.checkID(id1, false))
 			return tokens.invalidToken();
-		token = tokens.getNext();
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE"))
+			return tokens.invalidToken();
+		
+		//( coordinates_world | ( '$' id2) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA
+		if(!tokens.getNext().equalsIgnoreCase("DELTA"))
+			return tokens.invalidToken();
+		
+		//coordinates_delta
+		CoordinatesDelta coordinatesDelta = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//WITH CATENARIES
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("WITHCATENARIES"))
+			return tokens.invalidToken();
+		
+		//idn+
 		ArrayList<String> ids = new ArrayList<String>();
+		String token = tokens.getNext();
 		while(token != null) {
 			if(Checks.checkID(token, false)) {
 				ids.add(token);
@@ -285,7 +288,8 @@ public class Create extends ParserBase{
 		}
 		if(ids.size()==0)
 			return tokens.invalidToken();
-		return new CommandCreatePowerSubstation(id1, coords, deltas, ids);
+		
+		return new CommandCreatePowerSubstation(id1, coordinatesWorld, coordinatesDelta, ids);
 	}
 	
 	// CREATE STOCK commands
