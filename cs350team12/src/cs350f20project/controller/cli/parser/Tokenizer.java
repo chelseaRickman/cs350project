@@ -14,6 +14,7 @@ public class Tokenizer {
 	public Tokenizer(String commandText, MyParserHelper helper) {
 		arg = 0;
 		this.next = 0;
+		this.parser = helper;
 		tokens = new ArrayList<String>();
 		
 		String[] tokengetter = commandText.split("\\s+");
