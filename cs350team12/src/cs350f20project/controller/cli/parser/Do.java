@@ -93,19 +93,28 @@ public class Do extends ParserBase{
 	private A_Command selectRoundhouse() {
 		// 7  DO SELECT ROUNDHOUSE id POSITION angle ( CLOCKWISE | COUNTERCLOCKWISE )
 		// When entering this method, tokens.getNext() should be id
-		String id = tokens.get(3);
+		
+		//id
+		String id = tokens.getNext();
 		if(!Checks.checkID(id, false)) {
 			return tokens.invalidToken();
 		}
 		
-		String stringAngle = tokens.get(5);
+		//POSITION
+		if(!tokens.getNext().equalsIgnoreCase("POSITION")) {
+			return tokens.invalidToken();
+		}
+		
+		//angle
+		String stringAngle = tokens.getNext();
 		if(!Checks.checkStringIsDouble(stringAngle)) {
 			return tokens.invalidToken();
 		}
 		Angle angle = new Angle(Double.parseDouble(stringAngle));
 
+		//(CLOCKWISE | COUNTERCLOCKWISE)
 		boolean isClockwise = false;
-		String direction = tokens.get(6);
+		String direction = tokens.getNext();
 		if(!Checks.checkStringIsOneOfTheseValues(direction, new String[] {"CLOCKWISE", "COUNTERCLOCKWISE"})) {
 			return tokens.invalidToken();
 		}
