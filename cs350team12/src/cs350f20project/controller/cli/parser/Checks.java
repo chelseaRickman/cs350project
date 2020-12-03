@@ -62,6 +62,7 @@ public class Checks {
 		//Lat/Lon doubles should be length 3 x / y, Full writeouts should be length 12 x * y ' z ".
 		if(!reference.contains("/"))
 				throw new RuntimeException("Error! Invalid token!");
+<<<<<<< Updated upstream
 		String latlong[] = reference.split("/");
 		String lat = latlong[0];
 		String lon = latlong[1];
@@ -85,6 +86,39 @@ public class Checks {
 		y3 = Double.parseDouble(lonlist3[2]);
 		
 		return new CoordinatesWorld(new Latitude(x1, x2, x3), new Longitude(y1, y2, y3));
+=======
+			String latlong[] = conv.split("/");
+			String lat = latlong[0];
+			String lon = latlong[1];
+			String[] latlist = lat.split("\\*");
+			String[] lonlist = lon.split("\\*");
+			String[] latlist2 = latlist[1].split("\\'");
+			String[] lonlist2 = lonlist[1].split("\\'");
+			String latz = latlist2[1].replace('"', ' ');
+			latz = latz.strip();
+			String lonz = lonlist2[1].replace('"', ' ');
+			lonz = lonz.strip();
+			String[] lonlist3 = {lonlist[0], lonlist2[0], lonz};
+			String[] latlist3 = {latlist[0], latlist2[0], latz};
+			int x1, x2, y1, y2;
+			double x3, y3;
+			x1 = Integer.parseInt(latlist3[0]);
+			x2 = Integer.parseInt(lonlist3[1]);
+			y1 = Integer.parseInt(latlist3[0]);
+			y2 = Integer.parseInt(latlist3[1]);
+			x3 = Double.parseDouble(latlist3[2]);
+			y3 = Double.parseDouble(lonlist3[2]);
+			coords = new CoordinatesWorld(new Latitude(x1, x2, x3), new Longitude(y1, y2, y3));
+			
+		}
+		return coords;
+	}
+	
+	public static CoordinatesWorld parseCoordinatesWorld(String list, boolean canBeReference, MyParserHelper parser) {
+		ArrayList<String> pass = new ArrayList<String>();
+		pass.add(list);
+		return parseCoordinatesWorld(pass, canBeReference, parser);
+>>>>>>> Stashed changes
 	}
 
 	//don't think this is needed anymore
