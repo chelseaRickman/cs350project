@@ -307,24 +307,37 @@ public class Create extends ParserBase{
 	private A_Command stockEngine() {
 		// 34 CREATE STOCK ENGINE id1 AS DIESEL ON TRACK id2 DISTANCE number FROM ( START | END ) FACING ( START | END ) CommandCreateStockEngineDiesel
 		// When entering this method, tokens.getNext() should be id1
-		String engineId = tokens.get(3);
+		String engineId = tokens.getNext(); //id1
 		if(!Checks.checkID(engineId, false)) {
 			return tokens.invalidToken();
 		}
 		
-		String trackId = tokens.get(8);
+		String keywords = tokens.getNext() + tokens.getNext() + tokens.getNext() + tokens.getNext(); //AS DIESEL ON TRACK
+		if(!keywords.equalsIgnoreCase("ASDIESELONTRACK")) {
+			return tokens.invalidToken();
+		}
+		
+		String trackId = tokens.getNext(); //id2
 		if(!Checks.checkID(trackId, false)) {
 			return tokens.invalidToken();
 		}
 		
-		String distanceFromString = tokens.get(10);
+		if(!tokens.getNext().equalsIgnoreCase("DISTANCE")) { //DISTANCE
+			return tokens.invalidToken();
+		}
+		
+		String distanceFromString = tokens.getNext(); //number
 		if(!Checks.checkStringIsDouble(distanceFromString)) {
 			return tokens.invalidToken();
 		}
 		Double distance = Double.parseDouble(distanceFromString);
 		
+		if(!tokens.getNext().equalsIgnoreCase("FROM")) { //FROM
+			return tokens.invalidToken();
+		}
+		
 		boolean isFromStart = false;
-		String fromDirection = tokens.get(12);
+		String fromDirection = tokens.getNext(); //(START | END)
 		if(!Checks.checkStringIsOneOfTheseValues(fromDirection, new String[] {"START", "END"})) {
 			return tokens.invalidToken();
 		}
@@ -332,8 +345,12 @@ public class Create extends ParserBase{
 			isFromStart = true;
 		}
 		
+		if(!tokens.getNext().equalsIgnoreCase("FACING")) { //FACING
+			return tokens.invalidToken();
+		}
+		
 		boolean isFacingStart = false;
-		String facingDirection = tokens.get(14);
+		String facingDirection = tokens.getNext(); //(START | END)
 		if(!Checks.checkStringIsOneOfTheseValues(facingDirection, new String[] {"START", "END"})) {
 			return tokens.invalidToken();
 		}
