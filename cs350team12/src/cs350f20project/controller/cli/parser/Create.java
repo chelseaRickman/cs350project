@@ -300,17 +300,11 @@ public class Create extends ParserBase{
 		Can create private helper methods from here to handle the different cars. 
 		Maybe can use Tokenizer.get(index) to look at the type of car and then call that method. So at this point tokens.get(1) should return "BOX" for 28
 		28 CREATE STOCK CAR id AS BOX CommandCreateStockCarBox
-			return stockCarBox();
 		29 CREATE STOCK CAR id AS CABOOSE CommandCreateStockCarCaboose
-			return stockCarCaboose();
 		30 CREATE STOCK CAR id AS FLATBED CommandCreateStockCarFlatbed
-			return stockCarFlatbed();
 		31 CREATE STOCK CAR id AS PASSENGER CommandCreateStockCarPassenger
-			return stockCarPassenger();
 		32 CREATE STOCK CAR id AS TANK CommandCreateStockCarTank
-			return stockCarTank();
 		33 CREATE STOCK CAR id AS TENDER CommandCreateStockCarTender
-			return stockCarTender();
 		*/
 		String token = tokens.getNext();
 		if(!Checks.checkID(token, false))
