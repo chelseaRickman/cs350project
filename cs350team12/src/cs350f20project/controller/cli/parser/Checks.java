@@ -70,11 +70,11 @@ public class Checks {
 		
 		int latDegrees = Integer.parseInt(latList[0]);
 		int latMinutes = Integer.parseInt(latList[1]);
-		int latSeconds = Integer.parseInt(latList[2]);
+		double latSeconds = Double.parseDouble(latList[2]);
 		
 		int lonDegrees = Integer.parseInt(lonList[0]);
 		int lonMinutes = Integer.parseInt(lonList[1]);
-		int lonSeconds = Integer.parseInt(lonList[2]);
+		double lonSeconds = Double.parseDouble(lonList[2]);
 		
 		return new CoordinatesWorld(new Latitude(latDegrees, latMinutes, latSeconds), new Longitude(lonDegrees, lonMinutes, lonSeconds));
 	}
