@@ -175,24 +175,50 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	
 	public void locateStock(Tokenizer tokens) {
 		// 62 LOCATE STOCK id1 ON TRACK id2 DISTANCE number FROM ( START | END ) => CommandStructuralLocate
-		String stockId = tokens.get(2);
+		
+		//STOCK
+		if(!tokens.getNext().equalsIgnoreCase("STOCK")) {
+			tokens.invalidToken();
+		}
+		
+		//id1
+		String stockId = tokens.getNext();
 		if(!Checks.checkID(stockId, false)) {
 			tokens.invalidToken();
 		}
 		
-		String trackId = tokens.get(5);
+		//ON TRACK
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("ONTRACK")) {
+			tokens.invalidToken();
+		}
+		
+		//id2
+		String trackId = tokens.getNext();
 		if(!Checks.checkID(trackId, false)) {
 			tokens.invalidToken();
 		}
 		
-		String distanceString = tokens.get(7);
+		//DISTANCE
+		if(!tokens.getNext().equalsIgnoreCase("DISTANCE")) {
+			tokens.invalidToken();
+		}
+		
+		//number
+		String distanceString = tokens.getNext();
 		if(!Checks.checkStringIsDouble(distanceString)) {
 			tokens.invalidToken();
 		}
 		Double distance = Double.parseDouble(distanceString);
 		
+		//FROM
+		if(!tokens.getNext().equalsIgnoreCase("FROM")) {
+			tokens.invalidToken();
+		}
+		
+		//(START | END)
 		boolean isFromStart = false;
-		String fromStartOrEnd = tokens.get(9);
+		String fromStartOrEnd = tokens.getNext();
 		if(!Checks.checkStringIsOneOfTheseValues(fromStartOrEnd, new String[] {"START", "END"})) {
 			tokens.invalidToken();
 		}
