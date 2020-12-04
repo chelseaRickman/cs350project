@@ -589,14 +589,19 @@ public class Create extends ParserBase{
 			return tokens.invalidToken();
 		}
 		
+		System.out.println(curveId);
+		
 		//REFERENCE
-		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+		String nextToken = tokens.getNext();
+		if(!nextToken.equalsIgnoreCase("REFERENCE")) {
 			return tokens.invalidToken();
 		}
+		System.out.println(nextToken);
 		
 		//( coordinates_world | ( '$' id2 ) )
 		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
 		
+		System.out.println(coordinatesWorld);
 		//DELTA START
 		String keywords = tokens.getNext() + tokens.getNext();
 		if(!keywords.equalsIgnoreCase("DELTASTART")) {
@@ -818,6 +823,9 @@ public class Create extends ParserBase{
 		
 		//id1
 		String turnoutId = tokens.getNext();
+		if(!Checks.checkID(turnoutId, false)) {
+			return tokens.invalidToken();
+		}
 		
 		//REFERENCE
 		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
