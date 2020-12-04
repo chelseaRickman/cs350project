@@ -46,44 +46,38 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 	// So this is where the 41 if statements/rules will go
 	// And we can create a new class for each rule so it cleans this up a bit
 	public void parse(){
-		try {
-			for(Tokenizer tokens: this.tokenizers) {
-				String token = tokens.getNext();
+		for(Tokenizer tokens: this.tokenizers) {
+			String token = tokens.getNext();
 
-				if(token == null)
-					throw new RuntimeException("Error! Invalid token!");
+			if(token == null)
+				throw new RuntimeException("Error! Invalid token!");
 				
-				if(token.equalsIgnoreCase("CREATE"))
-					createCommand(tokens);
-				else if(token.equalsIgnoreCase("DO"))
-					doCommand(tokens);
-				else if(token.equalsIgnoreCase("@EXIT"))
-					exit();
-				else if(token.equalsIgnoreCase("@RUN"))
-					run(tokens);
-				else if(token.equalsIgnoreCase("COMMIT"))
-					commit();
-				else if(token.equalsIgnoreCase("USE"))
-					use(tokens);
-				else if(token.equalsIgnoreCase("CLOSE"))
-					closeView(tokens);
-				else if(token.equalsIgnoreCase("OPEN"))
-					openView();
-				else if(token.equalsIgnoreCase("COUPLE"))
-					coupleOrUncoupleStock(tokens, true);
-				else if(token.equalsIgnoreCase("LOCATE"))
-					locateStock(tokens);
-				else if(token.equalsIgnoreCase("UNCOUPLE"))
-					coupleOrUncoupleStock(tokens, false);
-				else {
-					throw new RuntimeException("Error! Invalid token!");
-				}
+			if(token.equalsIgnoreCase("CREATE"))
+				createCommand(tokens);
+			else if(token.equalsIgnoreCase("DO"))
+				doCommand(tokens);
+			else if(token.equalsIgnoreCase("@EXIT"))
+				exit();
+			else if(token.equalsIgnoreCase("@RUN"))
+				run(tokens);
+			else if(token.equalsIgnoreCase("COMMIT"))
+				commit();
+			else if(token.equalsIgnoreCase("USE"))
+				use(tokens);
+			else if(token.equalsIgnoreCase("CLOSE"))
+				closeView(tokens);
+			else if(token.equalsIgnoreCase("OPEN"))
+				openView();
+			else if(token.equalsIgnoreCase("COUPLE"))
+				coupleOrUncoupleStock(tokens, true);
+			else if(token.equalsIgnoreCase("LOCATE"))
+				locateStock(tokens);
+			else if(token.equalsIgnoreCase("UNCOUPLE"))
+				coupleOrUncoupleStock(tokens, false);
+			else {
+				throw new RuntimeException("Error! Invalid token!");
 			}
-		} catch(Exception e) {
-			System.out.println("Command error. Exiting program.");
-			System.exit(0);
 		}
-		
 	}
 	
 	//parses the tokens through an instance of the class CREATE
