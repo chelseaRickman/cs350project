@@ -1,6 +1,8 @@
 package cs350f20project.controller.cli.parser;
 
-import java.util.ArrayList;
+import cs350f20project.controller.ActionProcessor;
+import cs350f20project.controller.Controller;
+import cs350f20project.controller.cli.CommandLineInterface;
 
 /* This is just a tester class for our purposes. Not a part of the solution
 1 ( ( Rule#66 | Rule#67 ) ( ';' )? )*
@@ -48,38 +50,13 @@ import java.util.ArrayList;
 67 Rule#2 through Rule#65
 */
 
-import cs350f20project.controller.ActionProcessor;
-import cs350f20project.controller.Controller;
-import cs350f20project.controller.cli.CommandLineInterface;
-import cs350f20project.datatype.CoordinatesDelta;
-import cs350f20project.datatype.CoordinatesWorld;
-
 public class Tester {
 
 	public static void main(String[] args) {
-		/*ArrayList<String> testarr = new ArrayList();
-		testarr.add("1");
-		testarr.add("*");
-		testarr.add("1");
-		testarr.add("'");
-		testarr.add("1.0");
-		testarr.add("\"");
-		testarr.add("/");
-		testarr.add("1");
-		testarr.add("*");
-		testarr.add("1");
-		testarr.add("'");
-		testarr.add("1.0");
-		testarr.add("\"");
-		
-		CoordinatesWorld delt = Checks.parseCoordinatesWorld(teststring, false, parserHelper);
-		System.out.print(delt.toString());*/
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
 		String teststring = "46*40'58\"/117*19'21\"";
-		String commandText = "CREATE TRACK BRIDGE DRAW id1 REFERENCE "+ teststring + " DELTA START 12:18 END 12:20 ANGLE 0";
+		String commandText = "CREATE TRACK STRAIGHT track1 REFERENCE " + teststring + " DELTA START 0:0 END 500:0; COMMIT ; OPEN VIEW myview1 ORIGIN " + teststring + " WORLD WIDTH 500 SCREEN WIDTH 800 HEIGHT 800";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
-
 	}
-	
 }
