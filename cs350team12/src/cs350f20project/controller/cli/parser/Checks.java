@@ -1,12 +1,6 @@
 package cs350f20project.controller.cli.parser;
 
-import java.util.ArrayList;
-
 import javax.lang.model.SourceVersion;
-
-import cs350f20project.controller.ActionProcessor;
-import cs350f20project.controller.Controller;
-import cs350f20project.controller.cli.CommandLineInterface;
 import cs350f20project.datatype.CoordinatesDelta;
 import cs350f20project.datatype.CoordinatesWorld;
 import cs350f20project.datatype.Latitude;
