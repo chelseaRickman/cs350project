@@ -2,7 +2,6 @@ package cs350f20project.controller.cli.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.PointLocator;
@@ -34,7 +33,6 @@ import cs350f20project.datatype.*;
 48 CREATE TRACK SWITCH TURNOUT id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) STRAIGHT DELTA START coordinates_delta1 END coordinates_delta2 CURVE DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number
 49 CREATE TRACK SWITCH WYE id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2 DISTANCE ORIGIN number1 DELTA START coordinates_delta3 END coordinates_delta4 DISTANCE ORIGIN number2
  */
-
 
 public class Create extends ParserBase{
 
@@ -293,19 +291,7 @@ public class Create extends ParserBase{
 	}
 	
 	// CREATE STOCK commands
-	
 	private A_Command stockCar() {
-		/*
-		 * When entering this method tokens.getNext() should be id
-		Can create private helper methods from here to handle the different cars. 
-		Maybe can use Tokenizer.get(index) to look at the type of car and then call that method. So at this point tokens.get(1) should return "BOX" for 28
-		28 CREATE STOCK CAR id AS BOX CommandCreateStockCarBox
-		29 CREATE STOCK CAR id AS CABOOSE CommandCreateStockCarCaboose
-		30 CREATE STOCK CAR id AS FLATBED CommandCreateStockCarFlatbed
-		31 CREATE STOCK CAR id AS PASSENGER CommandCreateStockCarPassenger
-		32 CREATE STOCK CAR id AS TANK CommandCreateStockCarTank
-		33 CREATE STOCK CAR id AS TENDER CommandCreateStockCarTender
-		*/
 		String token = tokens.getNext();
 		if(!Checks.checkID(token, false))
 			return tokens.invalidToken();
@@ -332,9 +318,6 @@ public class Create extends ParserBase{
 			return tokens.invalidToken();
 		}
 	}
-	
-	
-	
 	
 	private A_Command stockEngine() {
 		// 34 CREATE STOCK ENGINE id1 AS DIESEL ON TRACK id2 DISTANCE number FROM ( START | END ) FACING ( START | END ) CommandCreateStockEngineDiesel
@@ -789,7 +772,37 @@ public class Create extends ParserBase{
 	private A_Command trackStraight() {
 		// 47 CREATE TRACK STRAIGHT id1 REFERENCE ( coordinates_world | ( '$' id2 ) ) DELTA START coordinates_delta1 END coordinates_delta2
 		// When entering this method, tokens.getNext() should be id1
-		return null;
+		String trackId = tokens.getNext();
+		if(!Checks.checkID(trackId, false)) {
+			return tokens.invalidToken();
+		}
+		
+		//REFERENCE
+		if(!tokens.getNext().equalsIgnoreCase("REFERENCE")) {
+			return tokens.invalidToken();
+		}
+		
+		//( coordinates_world | ( 'S' id2 ) )
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//DELTA START
+		String keywords = tokens.getNext() + tokens.getNext();
+		if(!keywords.equalsIgnoreCase("DELTASTART")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta1
+		CoordinatesDelta deltaStart = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		//END
+		if(!tokens.getNext().equalsIgnoreCase("END")) {
+			return tokens.invalidToken();
+		}
+		
+		//coordinates_delta2
+		CoordinatesDelta deltaEnd = Checks.parseCoordinatesDelta(tokens.getNext());
+		
+		return new CommandCreateTrackStraight(trackId, new PointLocator(coordinatesWorld, deltaStart, deltaEnd));
 	}
 	
 	private A_Command trackSwitch() {
