@@ -1,24 +1,19 @@
 package cs350f20project.controller.cli.parser;
 
-
 import java.util.ArrayList;
-
 import cs350f20project.controller.cli.TrackLocator;
 import cs350f20project.controller.command.A_Command;
 import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
+import cs350f20project.controller.command.meta.CommandMetaViewGenerate;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralLocate;
 import cs350f20project.controller.command.structural.CommandStructuralUncouple;
+import cs350f20project.datatype.CoordinatesScreen;
 import cs350f20project.datatype.CoordinatesWorld;
 
-public class CommandParser {
-	
-	private MyParserHelper parserHelper;
-	private ArrayList<Tokenizer> tokenizers;
-	
 /*
 CommandParser contains all the misc commands. It passes the DO and CREATE commands to their respective classes
 51 @EXIT
@@ -32,6 +27,12 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 66 USE id AS REFERENCE coordinates_world
 67 Rule#2 through Rule#65
 */
+
+public class CommandParser {
+	
+	private MyParserHelper parserHelper;
+	private ArrayList<Tokenizer> tokenizers;
+
 	public CommandParser(MyParserHelper parserHelper, String commandText) {
 		
 		String[] commandTexts = commandText.split(";");
@@ -51,7 +52,6 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 
 			if(token == null)
 				throw new RuntimeException("Error! Invalid token!");
-				
 			if(token.equalsIgnoreCase("CREATE"))
 				createCommand(tokens);
 			else if(token.equalsIgnoreCase("DO"))
@@ -67,7 +67,7 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 			else if(token.equalsIgnoreCase("CLOSE"))
 				closeView(tokens);
 			else if(token.equalsIgnoreCase("OPEN"))
-				openView();
+				openView(tokens);
 			else if(token.equalsIgnoreCase("COUPLE"))
 				coupleOrUncoupleStock(tokens, true);
 			else if(token.equalsIgnoreCase("LOCATE"))
@@ -91,8 +91,6 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		Do d = new Do(tokens);
 		this.parserHelper.getActionProcessor().schedule(d.parse());
 	}
-	
-	
 	
 	//Exit function
 	public void exit() {
@@ -155,10 +153,49 @@ CommandParser contains all the misc commands. It passes the DO and CREATE comman
 		this.parserHelper.getActionProcessor().schedule(new CommandMetaViewDestroy(id));	
 	}
 	
-	public void openView() {
+	public void openView(Tokenizer tokens) {
 		// 56 OPEN VIEW id1 ORIGIN ( coordinates_world | ( '$' id2 ) ) WORLD WIDTH integer1 SCREEN WIDTH integer2 HEIGHT integer3
 		// check to make sure the next token is in fact "VIEW" otherwise invalid token
 		
+		//VIEW
+		if(!tokens.getNext().equalsIgnoreCase("VIEW")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//id
+		String id = tokens.getNext(); 
+		if(!Checks.checkID(id, false)) {
+			tokens.invalidToken();
+		}
+		
+		//ORIGIN
+		if(!tokens.getNext().equalsIgnoreCase("ORIGIN")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//( coordinates_world | ( '$' id2 ) ) 
+		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
+		
+		//WORLD WIDTH
+		if(!(tokens.getNext() + tokens.getNext()).equalsIgnoreCase("WORLDWIDTH"))
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//integer1
+		int intOne = Integer.parseInt(tokens.getNext());
+		
+		//SCREEN WIDTH
+		if(!(tokens.getNext() + tokens.getNext()).equalsIgnoreCase("SCREENWIDTH")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//integer2
+		int intTwo = Integer.parseInt(tokens.getNext());
+		
+		//HEIGHT
+		if(!tokens.getNext().equalsIgnoreCase("HEIGHT")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//integer3
+		int intThree = Integer.parseInt(tokens.getNext());
+		
+		this.parserHelper.getActionProcessor().schedule(new CommandMetaViewGenerate(id, coordinatesWorld, intOne, new CoordinatesScreen(intTwo, intThree)));
 	}
 	
 	public void coupleOrUncoupleStock(Tokenizer tokens, boolean isCoupleElseUncouple) {
