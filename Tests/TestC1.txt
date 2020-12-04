@@ -1,1 +1,7 @@
 USE r1 AS REFERENCE 46*40'58"/117*19'21"
+
+//need to create a track for the train
+//need to create a diesel train
+// accelerate train to 60kph
+//reduce speed to 30 kph
+//brake
