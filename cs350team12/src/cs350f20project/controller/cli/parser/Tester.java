@@ -55,7 +55,7 @@ public class Tester {
 	public static void main(String[] args) {
 		MyParserHelper parserHelper = new MyParserHelper(new ActionProcessor(new CommandLineInterface(new Controller())));
 		String teststring = "46*40'58\"/117*19'21\"";
-		String commandText = "CREATE TRACK STRAIGHT track1 REFERENCE " + teststring + " DELTA START 0:0 END 500:0; COMMIT ; OPEN VIEW myview1 ORIGIN " + teststring + " WORLD WIDTH 500 SCREEN WIDTH 800 HEIGHT 800";
+		String commandText = "@run D:/CS350/cs350project/Tests/TestD2.txt";
 		CommandParser parser = new CommandParser(parserHelper, commandText);
 		parser.parse();
 	}

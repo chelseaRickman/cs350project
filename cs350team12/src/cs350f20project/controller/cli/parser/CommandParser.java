@@ -7,6 +7,7 @@ import cs350f20project.controller.command.meta.CommandMetaDoExit;
 import cs350f20project.controller.command.meta.CommandMetaDoRun;
 import cs350f20project.controller.command.meta.CommandMetaViewDestroy;
 import cs350f20project.controller.command.meta.CommandMetaViewGenerate;
+import cs350f20project.controller.command.meta.CommandMetaViewSync;
 import cs350f20project.controller.command.structural.CommandStructuralCommit;
 import cs350f20project.controller.command.structural.CommandStructuralCouple;
 import cs350f20project.controller.command.structural.CommandStructuralLocate;
@@ -74,6 +75,8 @@ public class CommandParser {
 				locateStock(tokens);
 			else if(token.equalsIgnoreCase("UNCOUPLE"))
 				coupleOrUncoupleStock(tokens, false);
+			else if(token.equalsIgnoreCase("SYNC"))
+				syncView(tokens);
 			else {
 				throw new RuntimeException("Error! Invalid token!");
 			}
@@ -135,6 +138,36 @@ public class CommandParser {
 		CoordinatesWorld coordinatesWorld = Checks.parseCoordinatesWorld(tokens.getNext(), tokens.getParser());
 		
 		this.parserHelper.addReference("$" + id, coordinatesWorld);	
+	}
+	
+	public void syncView(Tokenizer tokens) {
+		//57 and 58
+		//VIEW
+		if(!tokens.getNext().equalsIgnoreCase("VIEW")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		boolean nort = false; 
+		
+		//id
+		String id1 = tokens.getNext(); 
+		if(!Checks.checkID(id1, false)) {
+			tokens.invalidToken();
+		}
+		
+		//North or Track
+		nort = Checks.booleanFromString(tokens.getNext(), "NORTH", "TRACK");
+		
+		//ON
+		if(!tokens.getNext().equalsIgnoreCase("ON")) 
+			throw new RuntimeException("Error! Invalid token!");
+		
+		//id2
+		String id2 = tokens.getNext(); 
+		if(!Checks.checkID(id2, false)) {
+			tokens.invalidToken();
+		}
+		this.parserHelper.getActionProcessor().schedule(new CommandMetaViewSync(id1, id2, nort));
+		
 	}
 	
 	public void closeView(Tokenizer tokens) {
